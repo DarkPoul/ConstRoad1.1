@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ntu.api.controller.additional.Check01Controller">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#analysisOnClick" text="Розрахунок конструкції дорожнього покриття" />
+                  <MenuItem mnemonicParsing="false" onAction="#enumerationOnClick" text="Перебір варіантів конструкції дорожнього покритття" />
+                  <Menu mnemonicParsing="false" onAction="#optimizationOnClick" text="Оптимізація конструкції дорожнього покриття">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#optByCostOnClick" text="за вартістю" />
+                        <MenuItem mnemonicParsing="false" onAction="#optByBitumDepthOnClick" text="за товщиною асфальтобетону" />
+                        <MenuItem mnemonicParsing="false" onAction="#optByFundamentDepthOnClick" text="за товщиною основи" />
+                        <MenuItem mnemonicParsing="false" onAction="#optByTotalDepthOnClick" text="за загальною товщиною" />
+                     </items>
+                  </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#resultOnClick" text="Представлення результатів розрахунку" />
+               </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>
