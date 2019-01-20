@@ -2,6 +2,7 @@ package com.ntu.api.domain;
 
 import java.io.Serializable;
 
+//клас шару-покриття для і
 public class LayerT implements Serializable {
 
     private Integer id;

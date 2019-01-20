@@ -37,7 +37,7 @@ public class Lists {
     private static ArrayList<Sand> sands;
     private static ArrayList<String> sandsName;
     private static ArrayList<RoadLayers> roadLayers;
-    private static ArrayList<String> roadLAyersName;
+    private static ArrayList<String> roadLayersName;
     private static ArrayList<ArrayList<String>> layersList;
 
 
@@ -129,8 +129,8 @@ public class Lists {
     public static ArrayList<RoadLayers> getRoadLayers() {
         return roadLayers;
     }
-    public static ArrayList<String> getRoadLAyersName() {
-        return roadLAyersName;
+    public static ArrayList<String> getRoadLayersName() {
+        return roadLayersName;
     }
     public static ArrayList<ArrayList<String>> getLayersList() {
         return layersList;
@@ -165,7 +165,7 @@ public class Lists {
         sands = create(new File(root+ "/sands"));
         sandsName = nameLayerList(sands);
         roadLayers = create(new File(root + "/roadLayers"));
-        roadLAyersName = nameList(roadLayers);
+        roadLayersName = nameList(roadLayers);
         layersList = create(new File(root + "/layersName"));
     }
 

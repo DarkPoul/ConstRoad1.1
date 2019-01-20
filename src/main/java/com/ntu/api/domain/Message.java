@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+//клас формування повідомлення-помилки
 public class Message {
     private static String message;
 
@@ -19,6 +20,7 @@ public class Message {
         Message.message = message;
     }
 
+//    метод формування повідомлення-помилки
     public static void errorCatch(AnchorPane pane, String name, String message){
         setMessage(message);
         Stage error = new Stage();

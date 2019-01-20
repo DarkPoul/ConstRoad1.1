@@ -71,6 +71,9 @@ public class InputController {
     private static ArrayList<String> newRoadTypeList = new ArrayList<>();
     private static ArrayList<String> newLoadTypeList = new ArrayList<>();
 
+    public ObservableList<LayerT> getLayers() {
+        return layers;
+    }
 
     @FXML public void initialize(){
         Lists.listReader();
@@ -226,10 +229,31 @@ public class InputController {
     }
 
     public void correctRoadLayer(){
+        Stage correctLayer = new Stage();
+        correctLayer.setTitle("Редагування шару конструкції дорожнього одягу");
+        correctLayer.setResizable(false);
 
+        AnchorPane correctLayerPane;
+        try {
+            correctLayerPane = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/additional/changeRoadLayer.fxml"));
+            correctLayer.initOwner(input.getScene().getWindow());
+            correctLayer.initModality(Modality.WINDOW_MODAL);
+            correctLayer.setScene(new Scene(correctLayerPane));
+            correctLayer.show();
+            correctLayer.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    layers.clear();
+                    layers.setAll(RoadConstraction.layerTableList());
+                }
+            });
+        } catch (IOException e) {
+            Message.errorCatch(inputPane,"Error", "InputError");
+        }
     }
 
     public void deleteRoadLayer(){
+
 
     }
 

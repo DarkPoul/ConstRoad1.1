@@ -2,13 +2,10 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="changeLayerPane" prefHeight="357.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ntu.api.controller.additional.AddLayerController">
+<AnchorPane fx:id="changeLayerPane" prefHeight="357.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ntu.api.controller.additional.ChangeLayerController">
    <children>
       <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Редагування шару дорожнього одягу" textAlignment="CENTER" AnchorPane.bottomAnchor="320.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <font>
@@ -17,7 +14,7 @@
       </Label>
       <GridPane gridLinesVisible="true" layoutY="52.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="238.0" prefWidth="818.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="45.0">
          <children>
-            <ComboBox fx:id="layerConstraction" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerConstractionOnClick" prefWidth="150.0" visibleRowCount="20" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <ComboBox fx:id="layerConstractionBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerConstractionOnClick" prefWidth="150.0" visibleRowCount="20" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
@@ -58,7 +55,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Label>
-            <ComboBox fx:id="layerDepth" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerDepthOnClick" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <ComboBox fx:id="layerDepthBox" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerDepthOnClick" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
@@ -74,7 +71,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Label>
-            <ComboBox fx:id="layer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerOnClick" prefWidth="150.0" GridPane.columnIndex="1">
+            <ComboBox fx:id="layerBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerOnClick" prefWidth="150.0" GridPane.columnIndex="1">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
@@ -82,10 +79,13 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </ComboBox>
-            <TextArea fx:id="layerType" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextArea fx:id="layerType" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </GridPane.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </TextArea>
             <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text=" Позиція шару дорожнього одягу" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
                <font>
@@ -98,7 +98,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Label>
-            <ComboBox fx:id="layerPosition" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerPositionOnClick" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <ComboBox fx:id="layerPositionBox" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#layerPositionOnClick" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
@@ -149,7 +149,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveUpOnClick" text="Перенмістити вгору" wrapText="true">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveUpOnClick" text="Перемістити вгору" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -160,7 +160,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveOnClick" text="Перемістити вниз" wrapText="true" GridPane.columnIndex="3">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveDownOnClick" text="Перемістити вниз" wrapText="true" GridPane.columnIndex="3">
                <font>
                   <Font size="14.0" />
                </font>

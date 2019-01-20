@@ -23,7 +23,7 @@ public class RoadConstraction extends Element implements Serializable {
     * groundCorection - описує поправку на конструктивні особливості використовуваних
     дренажних конструкцій у дорожньо-кліматичних зонах І-IV
     * humidity - вологість грунту
-    * correction - поправка на конструктивні особливості дренажної
+    * correction - поправка на конструктивні особливості дренажної конструкції
     * roadLayers - список шарів покриття
     *
     */
@@ -55,35 +55,30 @@ public class RoadConstraction extends Element implements Serializable {
     }
     public static void setRbcz(RBCZ rbcz) {
         RoadConstraction.rbcz = rbcz;
-        System.out.println(rbcz);
     }
     public static Road getRoad() {
         return road;
     }
     public static void setRoad(Road road) {
         RoadConstraction.road = road;
-        System.out.println(road);
     }
     public static RoadType getRoadType() {
         return roadType;
     }
     public static void setRoadType(RoadType roadType) {
         RoadConstraction.roadType = roadType;
-        System.out.println(roadType);
     }
     public static DesigionLoad getDesigionLoad() {
         return desigionLoad;
     }
     public static void setDesigionLoad(DesigionLoad desigionLoad) {
         RoadConstraction.desigionLoad = desigionLoad;
-        System.out.println(desigionLoad);
     }
     public static Soils getSoils() {
         return soils;
     }
     public static void setSoils(Soils soils) {
         RoadConstraction.soils = soils;
-        System.out.println(soils);
     }
     public static GroundType getGroundType() {
         return groundType;
@@ -91,21 +86,18 @@ public class RoadConstraction extends Element implements Serializable {
     public static void setGroundType(GroundType groundType) {
         RoadConstraction.groundType = groundType;
         humidityChoose();
-        System.out.println(groundType);
     }
     public static Ground getGround() {
         return ground;
     }
     public static void setGround(Ground ground) {
         RoadConstraction.ground = ground;
-        System.out.println(ground);
     }
     public static RoadLines getRoadLines() {
         return roadLines;
     }
     public static void setRoadLines(RoadLines roadLines) {
         RoadConstraction.roadLines = roadLines;
-        System.out.println(roadLines);
     }
     public static GroundCorection getGroundCorection() {
         return groundCorection;
@@ -113,21 +105,18 @@ public class RoadConstraction extends Element implements Serializable {
     public static void setGroundCorection(GroundCorection groundCorection) {
         RoadConstraction.groundCorection = groundCorection;
         correctionChoose();
-        System.out.println(groundCorection);
     }
     public static double getHumidity() {
         return humidity;
     }
     public static void setHumidity(double humidity) {
         RoadConstraction.humidity = humidity;
-        System.out.println("humidity = "+humidity);
     }
     public static double getCorrection() {
         return correction;
     }
     public static void setCorrection(double correction) {
         RoadConstraction.correction = correction;
-        System.out.println("correction = " + correction);
     }
 
     public static ArrayList<Bituminous> getBituminous() {
@@ -168,8 +157,7 @@ public class RoadConstraction extends Element implements Serializable {
         RoadConstraction.roadLayers = roadLayers;
     }
 
-
-
+// метод вибору вологості грунту
     private static void humidityChoose(){
         if(getRoad().getName().equals("I-a") || getRoad().getName().equals("I-b") || getRoad().getName().equals("II")){
             setHumidity(getGroundType().getHumidity_1_2());
@@ -185,6 +173,7 @@ public class RoadConstraction extends Element implements Serializable {
         }
     }
 
+    // метод вибору поправки на конструктивні особливості дренажної конструкції
     private static void correctionChoose(){
         if(getRoad().getName().equals("I-a") || getRoad().getName().equals("I-b")){
             setCorrection(getGroundCorection().getCorrection1());
@@ -206,6 +195,7 @@ public class RoadConstraction extends Element implements Serializable {
         }
     }
 
+//    метод формування список шарів покриття
     public static void layers(){
         roadLayers = new ArrayList<>();
         roadLayers.add(new RoadLayers("Асфальтобетон",bituminous));
@@ -214,18 +204,36 @@ public class RoadConstraction extends Element implements Serializable {
         roadLayers.add(new RoadLayers("Неукріплені матеріали основ",unstrengthenedMaterialsBase));
         roadLayers.add(new RoadLayers("Шар нев'язкого середовища",sands));
     }
-
+// метод формування списку обєктів - шарів покриття для відображення в фронт-складовій програми
     public static ArrayList<LayerT> layerTableList(){
         ArrayList<LayerT> layers = new ArrayList<>();
         int temp =1;
         for(RoadLayers roadLayers: roadLayers){
             for(Layer el:roadLayers.getLayers()){
-//                String str = el.getName() + " " + el.getMaterial();
                 layers.add(new LayerT(temp,roadLayers.getName(),el.getName() + " " + el.getMaterial(), el.getThickness()));
                 temp++;
             }
         }
         return layers;
+    }
+
+//    метод формування списку - записів шарів покриття для відображення в фронт-складовій програми
+    public static ArrayList<String> layerTableStringList(){
+        ArrayList<String> list = new ArrayList<>();
+        for(LayerT el: layerTableList()){
+            list.add(new String(el.getId() + " " + el.getType() + " " + el.getConstruction() + " " + el.getThickness()));
+        }
+        return list;
+    }
+
+//    метод формування списку можливих товщин матеріалу - шару покриття
+    public static ArrayList<String> depthList(Double start, Double finish){
+        ArrayList<String>list = new ArrayList<>();
+        while (start<=finish){
+            list.add(start.toString());
+            start=start+0.5;
+        }
+        return list;
     }
 
 }

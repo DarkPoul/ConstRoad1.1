@@ -33,7 +33,7 @@ public class AddLayerController {
         layerConstractionList = FXCollections.observableArrayList();
         layerDepthList = FXCollections.observableArrayList();
 
-        layerTypeList.addAll(Lists.getRoadLAyersName());
+        layerTypeList.addAll(Lists.getRoadLayersName());
         layerConstractionList.addAll(Lists.getLayersList().get(0));
         layerConstractionList.addAll(Lists.getLayersList().get(1));
         layerConstractionList.addAll(Lists.getLayersList().get(2));
@@ -52,6 +52,7 @@ public class AddLayerController {
         try {
             boxClear(layerConstraction);
             boxClear(layerDepth);
+            layerDepth.getItems().setAll(new ArrayList<>());
             layerConstraction.getItems().setAll(Lists.getLayersList().get(layerType.getSelectionModel().getSelectedIndex()));
         }
         catch (RuntimeException e){}
@@ -60,7 +61,7 @@ public class AddLayerController {
     @FXML public void layerConstractionOnClick() {
         try{
         boxClear(layerDepth);
-        layerDepth.getItems().addAll(depthList());}
+        layerDepth.getItems().setAll(depthList());}
         catch (RuntimeException e){}
     }
 
@@ -77,39 +78,43 @@ public class AddLayerController {
     }
 
     @FXML public void addOnClick() {
-        if (Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()) <
-                Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
-                        getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness() ||
-                Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()) >
-                        Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
-                                getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness()) {
-            Message.errorCatch(addLayerPane, "Error", "Введена товщина шару дорожнього одягу є " +
-                    "недопустимою для даної конструкції шару дорожнього одягу.");
-        } else {
-            try {
-                Layer temp = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
-                        getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex());
-                temp.setThickness(Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()));
-                if (layerType.getSelectionModel().getSelectedIndex() == 0) {
-                    temp.setThicknessVariationCoeficient(2.84/(10.2+temp.getThickness()));
-                    RoadConstraction.getBituminous().add((Bituminous)temp);
-                }
-                else{
-                    temp.setThicknessVariationCoeficient(2.84/(5.6+temp.getThickness()));
-                    if (layerType.getSelectionModel().getSelectedIndex() == 1) {
-                        RoadConstraction.getStrengthenedMaterials().add((StrengthenedMaterial)temp);
-                    } else if (layerType.getSelectionModel().getSelectedIndex() == 2) {
-                        RoadConstraction.getUnstrengthenedMaterialsCover().add((UnstrengthenedMaterial)temp);
-                    } else if (layerType.getSelectionModel().getSelectedIndex() == 3) {
-                        RoadConstraction.getUnstrengthenedMaterialsBase().add((UnstrengthenedMaterial)temp);
-                    } else if (layerType.getSelectionModel().getSelectedIndex() == 4) {
-                        RoadConstraction.getSands().add((Sand)temp);
+        try {
+            if (Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()) <
+                    Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
+                            getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness() ||
+                    Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()) >
+                            Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
+                                    getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness()) {
+                Message.errorCatch(addLayerPane, "Error", "Введена товщина шару дорожнього одягу є " +
+                        "недопустимою для даної конструкції шару дорожнього одягу.");
+            } else {
+                try {
+                    Layer temp = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
+                            getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex());
+                    temp.setThickness(Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()));
+                    if (layerType.getSelectionModel().getSelectedIndex() == 0) {
+                        temp.setThicknessVariationCoeficient(2.84 / (10.2 + temp.getThickness()));
+                        RoadConstraction.getBituminous().add((Bituminous) temp);
+                    } else {
+                        temp.setThicknessVariationCoeficient(2.84 / (5.6 + temp.getThickness()));
+                        if (layerType.getSelectionModel().getSelectedIndex() == 1) {
+                            RoadConstraction.getStrengthenedMaterials().add((StrengthenedMaterial) temp);
+                        } else if (layerType.getSelectionModel().getSelectedIndex() == 2) {
+                            RoadConstraction.getUnstrengthenedMaterialsCover().add((UnstrengthenedMaterial) temp);
+                        } else if (layerType.getSelectionModel().getSelectedIndex() == 3) {
+                            RoadConstraction.getUnstrengthenedMaterialsBase().add((UnstrengthenedMaterial) temp);
+                        } else if (layerType.getSelectionModel().getSelectedIndex() == 4) {
+                            RoadConstraction.getSands().add((Sand) temp);
+                        }
                     }
+                    RoadConstraction.layers();
+                    okOnClick();
+                } catch (RuntimeException e) {
                 }
-                RoadConstraction.layers();
-                okOnClick();
-            } catch (RuntimeException e) {
             }
+        }
+        catch (NumberFormatException e){
+            Message.errorCatch(addLayerPane,"Error", "Невірно введені дані. Перевірте введені дані.");
         }
     }
 
@@ -125,26 +130,19 @@ public class AddLayerController {
     }
 
     private ArrayList<String> depthList(){
-        ArrayList<String>list = new ArrayList<>();
         Double start = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
                 getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness();
         Double finish = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
                 getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness();
-        while (start<=finish){
-            list.add(start.toString());
-            start=start+0.5;
-        }
-        return list;
+        return RoadConstraction.depthList(start, finish);
     }
 
-    public void okOnClick(){
+    private void okOnClick(){
         try{
-            System.out.println(RoadConstraction.getRoadLayers());
             Stage dlg = (Stage)(addLayerPane.getScene().getWindow());
             dlg.getOnCloseRequest().handle(new WindowEvent(dlg, WindowEvent.WINDOW_CLOSE_REQUEST));
             dlg.close();}
         catch (RuntimeException e){}
     }
-
 
 }
