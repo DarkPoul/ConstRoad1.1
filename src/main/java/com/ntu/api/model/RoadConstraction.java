@@ -1,6 +1,7 @@
 package com.ntu.api.model;
 
 import com.ntu.api.domain.LayerT;
+import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.listCreate.Objects.*;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
 
@@ -234,6 +235,26 @@ public class RoadConstraction extends Element implements Serializable {
             start=start+0.5;
         }
         return list;
+    }
+// метод для визначення типу шару дорожнього одягу
+    public static RoadLayers roadLayersCheck(String layerType){
+        RoadLayers roadLayers = new RoadLayers();
+        for (RoadLayers el: Lists.getRoadLayers()){
+            if(el.getName().equals(layerType)){
+                roadLayers = el;
+            }
+        }
+        return roadLayers;
+    }
+    // метод для формування списку шарів конкретного типу шару дорожнього одягу
+    public static ArrayList<String> positionCheck(String layerType){
+        ArrayList<String> positionList = new ArrayList<>();
+        for(LayerT el: RoadConstraction.layerTableList()){
+            if(el.getType().equals(layerType)){
+                positionList.add(el.getId().toString());
+            }
+        }
+        return positionList;
     }
 
 }

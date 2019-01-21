@@ -64,13 +64,13 @@ public class ChangeLayerController {
 
             layerType.setText(RoadConstraction.layerTableList().get(layerBox.getSelectionModel().getSelectedIndex()).getType());
             layerConstractionBox.setPromptText(RoadConstraction.layerTableList().get(layerBox.getSelectionModel().getSelectedIndex()).getConstruction());
-            layerConstractionBox.getItems().setAll(Lists.getLayersList().get(Lists.getRoadLayers().indexOf(roadLayersCheck())));
+            layerConstractionBox.getItems().setAll(Lists.getLayersList().get(Lists.getRoadLayers().indexOf(RoadConstraction.roadLayersCheck(layerType.getText()))));
             layerDepthBox.setPromptText(RoadConstraction.layerTableList().get(layerBox.getSelectionModel().getSelectedIndex()).getThickness().toString());
             layerDepthBox.getItems().setAll(depthCheck0());
 
             oldlayerPosition = RoadConstraction.layerTableList().get(layerBox.getSelectionModel().getSelectedIndex()).getId();
             layerPositionBox.setPromptText(oldlayerPosition.toString());
-            layerPositionBox.getItems().setAll(positionCheck());
+            layerPositionBox.getItems().setAll(RoadConstraction.positionCheck(layerType.getText()));
             layerPosition = Integer.parseInt(layerPositionBox.getPromptText());
 
             tempLayer = layerChoose();
@@ -83,7 +83,7 @@ public class ChangeLayerController {
         boxClear(layerDepthBox);
         layerConstractionBox.setPromptText(Lists.getRoadLayers().get(layerBox.getSelectionModel().getSelectedIndex()).getLayers().get(layerConstractionBox.getSelectionModel().getSelectedIndex()).toString());
         layerDepthBox.getItems().setAll(depthCheck());
-        layerPositionBox.getItems().setAll(positionCheck());
+        layerPositionBox.getItems().setAll(RoadConstraction.positionCheck(layerType.getText()));
         tempLayer = layerCheck();}
         catch (RuntimeException e){}
     }
@@ -91,7 +91,7 @@ public class ChangeLayerController {
     @FXML private void layerDepthOnClick(){
         try{
         layerDepthBox.setPromptText(RoadConstraction.layerTableList().get(layerBox.getSelectionModel().getSelectedIndex()).getThickness().toString());;
-        layerPositionBox.getItems().setAll(positionCheck());
+        layerPositionBox.getItems().setAll(RoadConstraction.positionCheck(layerType.getText()));
         tempLayer.setThickness(Double.parseDouble(layerDepthBox.getSelectionModel().getSelectedItem()));
         }
         catch (RuntimeException e){}
@@ -104,7 +104,7 @@ public class ChangeLayerController {
 
     @FXML private void moveUpOnClick(){
         layerPosition = Integer.parseInt(layerPositionBox.getPromptText());
-            if(layerPosition>Integer.parseInt(positionCheck().get(0))){
+            if(layerPosition>Integer.parseInt(RoadConstraction.positionCheck(layerType.getText()).get(0))){
                 layerPosition--;
                 saveOnClick(true);
             }
@@ -112,7 +112,7 @@ public class ChangeLayerController {
 
     @FXML private void moveDownOnClick(){
         layerPosition = Integer.parseInt(layerPositionBox.getPromptText());
-        if(layerPosition<Integer.parseInt(positionCheck().get(positionCheck().size()-1))){
+        if(layerPosition<Integer.parseInt(RoadConstraction.positionCheck(layerType.getText()).get(RoadConstraction.positionCheck(layerType.getText()).size()-1))){
             layerPosition++;
             saveOnClick(true);
         }
@@ -135,9 +135,9 @@ public class ChangeLayerController {
             }
             else{
                 if (tempLayer.getThickness() >= tempLayer.getMinThickness() && tempLayer.getThickness() <= tempLayer.getMaxThickness()) {
-                    int roadLayerskod = Lists.getRoadLayers().indexOf(roadLayersCheck());
+                    int roadLayerskod = Lists.getRoadLayers().indexOf(RoadConstraction.roadLayersCheck(layerType.getText()));
                     if (bool) {
-                        ArrayList<String> position = positionCheck();
+                        ArrayList<String> position = RoadConstraction.positionCheck(layerType.getText());
                         RoadConstraction.getRoadLayers().get(roadLayerskod).getLayers().remove(position.indexOf(oldlayerPosition.toString()));
                         if (roadLayerskod == 0) {
                             tempLayer.setThicknessVariationCoeficient(2.84 / (10.2 + tempLayer.getThickness()));
@@ -158,17 +158,17 @@ public class ChangeLayerController {
                     } else {
                         if (roadLayerskod == 0) {
                             tempLayer.setThicknessVariationCoeficient(2.84 / (10.2 + tempLayer.getThickness()));
-                            RoadConstraction.getBituminous().set(positionCheck().indexOf(layerPosition.toString()), (Bituminous) tempLayer);
+                            RoadConstraction.getBituminous().set(RoadConstraction.positionCheck(layerType.getText()).indexOf(layerPosition.toString()), (Bituminous) tempLayer);
                         } else {
                             tempLayer.setThicknessVariationCoeficient(2.84 / (5.6 + tempLayer.getThickness()));
                             if (roadLayerskod == 1) {
-                                RoadConstraction.getStrengthenedMaterials().set(positionCheck().indexOf(layerPosition.toString()), (StrengthenedMaterial) tempLayer);
+                                RoadConstraction.getStrengthenedMaterials().set(RoadConstraction.positionCheck(layerType.getText()).indexOf(layerPosition.toString()), (StrengthenedMaterial) tempLayer);
                             } else if (roadLayerskod == 2) {
-                                RoadConstraction.getUnstrengthenedMaterialsCover().set(positionCheck().indexOf(layerPosition.toString()), (UnstrengthenedMaterial) tempLayer);
+                                RoadConstraction.getUnstrengthenedMaterialsCover().set(RoadConstraction.positionCheck(layerType.getText()).indexOf(layerPosition.toString()), (UnstrengthenedMaterial) tempLayer);
                             } else if (roadLayerskod == 3) {
-                                RoadConstraction.getUnstrengthenedMaterialsBase().set(positionCheck().indexOf(layerPosition.toString()), (UnstrengthenedMaterial) tempLayer);
+                                RoadConstraction.getUnstrengthenedMaterialsBase().set(RoadConstraction.positionCheck(layerType.getText()).indexOf(layerPosition.toString()), (UnstrengthenedMaterial) tempLayer);
                             } else if (roadLayerskod == 4) {
-                                RoadConstraction.getSands().set(positionCheck().indexOf(layerPosition.toString()), (Sand) tempLayer);
+                                RoadConstraction.getSands().set(RoadConstraction.positionCheck(layerType.getText()).indexOf(layerPosition.toString()), (Sand) tempLayer);
                             }
                         }
                     }
@@ -191,18 +191,8 @@ public class ChangeLayerController {
         dlg.close();
     }
 
-    private RoadLayers roadLayersCheck(){
-        RoadLayers roadLayers = new RoadLayers();
-        for (RoadLayers el: Lists.getRoadLayers()){
-            if(el.getName().equals(layerType.getText())){
-                roadLayers = el;
-            }
-        }
-        return roadLayers;
-    }
-
     private Layer layerCheck(){
-        return roadLayersCheck().getLayers().get(layerConstractionBox.getSelectionModel().getSelectedIndex());
+        return RoadConstraction.roadLayersCheck(layerType.getText()).getLayers().get(layerConstractionBox.getSelectionModel().getSelectedIndex());
     }
 
     private ArrayList<String> depthCheck(){
@@ -210,28 +200,18 @@ public class ChangeLayerController {
     }
 
     private ArrayList<String> depthCheck0(){
-        for(Layer el: roadLayersCheck().getLayers()){
+        for(Layer el: RoadConstraction.roadLayersCheck(layerType.getText()).getLayers()){
             if(new String(el.getName() + " " +el.getMaterial()).equals(layerConstractionBox.getPromptText())){
-                Layer layer = roadLayersCheck().getLayers().get(roadLayersCheck().getLayers().indexOf(el));
+                Layer layer = RoadConstraction.roadLayersCheck(layerType.getText()).getLayers().get(RoadConstraction.roadLayersCheck(layerType.getText()).getLayers().indexOf(el));
                 return RoadConstraction.depthList(layer.getMinThickness(), layer.getMaxThickness());
             }
         }
         return new ArrayList<>();
     }
 
-    private ArrayList<String> positionCheck(){
-        ArrayList<String> positionList = new ArrayList<>();
-        for(LayerT el: RoadConstraction.layerTableList()){
-            if(el.getType().equals(layerType.getText())){
-              positionList.add(el.getId().toString());
-            }
-        }
-        return positionList;
-    }
-
     private Layer layerChoose(){
         Layer layer = new Layer();
-        for(Layer layer1: roadLayersCheck().getLayers()){
+        for(Layer layer1: RoadConstraction.roadLayersCheck(layerType.getText()).getLayers()){
             if(new String(layer1.getName() + " " + layer1.getMaterial()).equals(layerConstractionBox.getPromptText())){
                 layer = layer1;
             }

@@ -253,8 +253,28 @@ public class InputController {
     }
 
     public void deleteRoadLayer(){
+        Stage deleteLayer = new Stage();
+        deleteLayer.setTitle("Видалення шару конструкції дорожнього одягу");
+        deleteLayer.setResizable(false);
 
-
+        AnchorPane deleteLayerPane;
+        try{
+            deleteLayerPane = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/additional/deleteRoadLayer.fxml"));
+            deleteLayer.initOwner(input.getScene().getWindow());
+            deleteLayer.initModality(Modality.WINDOW_MODAL);
+            deleteLayer.setScene(new Scene(deleteLayerPane));
+            deleteLayer.show();
+            deleteLayer.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    layers.clear();
+                    layers.setAll(RoadConstraction.layerTableList());
+                }
+            });
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void passageCalculation(){
