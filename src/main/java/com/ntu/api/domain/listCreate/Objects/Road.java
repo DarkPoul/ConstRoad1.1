@@ -21,6 +21,10 @@ public class Road extends Element implements Serializable {
     * cR коефіцієнт варіації напруження (потрібного модуля пружності) для критерію пружного прогину,
     * cT коефіцієнт варіації напруження (потрібного модуля пружності) для критерію зсуву у невязких шарах,
     * kStudent коефіцієнт стюдента, який відповідає коефіцієнту надійності
+    * roadType - список типів дорожнього покриття
+    * minElasticModulCapital - мінімальний потрібний модуль пружності МПа для капітального типу дорожнього одягу
+    * minElasticModulLite - мінімальний потрібний модуль пружності МПа для вдосконаленого полекшеного типу дорожнього одягу
+    * minElasticModulTransfer - мінімальний потрібний модуль пружності МПа для перехідного типу дорожнього одягу
     * */
 
     private String name;
@@ -37,6 +41,9 @@ public class Road extends Element implements Serializable {
     private Double cT;
     private Double kStudent;
     private ArrayList<RoadType> roadType;
+    private Integer minElasticModulCapital;
+    private Integer minElasticModulLite;
+    private Integer minElasticModulTransfer;
 
     @Override
     public String getName() {
@@ -81,10 +88,20 @@ public class Road extends Element implements Serializable {
     public ArrayList<RoadType> getRoadType() {
         return roadType;
     }
+    public Integer getMinElasticModulCapital() {
+        return minElasticModulCapital;
+    }
+    public Integer getMinElasticModulLite() {
+        return minElasticModulLite;
+    }
+    public Integer getMinElasticModulTransfer() {
+        return minElasticModulTransfer;
+    }
 
-    public Road(String name, Double kN, Double b, Double rBend, Double rDefl, Double rOffset,
-                Double crBend, Double crDefl, Double crOffset, Double cS, Double cR, Double cT,
-                Double kStudent, ArrayList<RoadType> roadType) {
+    public Road(String name, Double kN, Double b, Double rBend, Double rDefl, Double rOffset, Double crBend,
+                Double crDefl, Double crOffset, Double cS, Double cR, Double cT, Double kStudent,
+                ArrayList<RoadType> roadType, Integer minElasticModulCapital, Integer minElasticModulLite,
+                Integer minElasticModulTransfer) {
         this.name = name;
         this.kN = kN;
         this.b = b;
@@ -99,6 +116,9 @@ public class Road extends Element implements Serializable {
         this.cT = cT;
         this.kStudent = kStudent;
         this.roadType = roadType;
+        this.minElasticModulCapital = minElasticModulCapital;
+        this.minElasticModulLite = minElasticModulLite;
+        this.minElasticModulTransfer = minElasticModulTransfer;
     }
 
     @Override
