@@ -1,7 +1,8 @@
 package com.ntu.api.controller.additional;
 
+import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Lists;
-import com.ntu.api.model.RoadConstraction;
+import com.ntu.api.domain.RoadConstraction;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -10,26 +11,27 @@ import javafx.stage.WindowEvent;
 public class RbczController {
     @FXML
     AnchorPane rbczPane;
+    private RoadConstraction roadConstraction = InputController.getRoadConstraction();
 
     @FXML public void oneOnClick(){
-        RoadConstraction.setRbcz(Lists.getRbczList().get(0));
+        roadConstraction.setRbcz(Lists.getRbczList().get(0));
         close();
     }
     @FXML public void twoOnClick(){
-        RoadConstraction.setRbcz(Lists.getRbczList().get(1));
+        roadConstraction.setRbcz(Lists.getRbczList().get(1));
         close();
     }
     @FXML public void treeOnClick(){
-        RoadConstraction.setRbcz(Lists.getRbczList().get(2));
+        roadConstraction.setRbcz(Lists.getRbczList().get(2));
         close();
     }
     @FXML public void fourWestOnClick(){
-        RoadConstraction.setRbcz(Lists.getRbczList().get(3));
+        roadConstraction.setRbcz(Lists.getRbczList().get(3));
         close();
     }
 
     @FXML public void fourSouthOnClick(){
-        RoadConstraction.setRbcz(Lists.getRbczList().get(4));
+        roadConstraction.setRbcz(Lists.getRbczList().get(4));
         close();
     }
 

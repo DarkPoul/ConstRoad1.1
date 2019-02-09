@@ -2,7 +2,8 @@ package com.ntu.api.controller.main;
 
 import com.ntu.api.controller.additional.AboutController;
 import com.ntu.api.domain.Message;
-import com.ntu.api.model.RoadConstraction;
+import com.ntu.api.domain.RoadConstraction;
+import com.ntu.api.model.RoadConstractionModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,7 +17,15 @@ import java.io.*;
 
 public class MainController {
     @FXML
-    AnchorPane main;
+    private AnchorPane main;
+    private RoadConstraction roadConstraction;
+
+    public RoadConstraction getRoadConstraction() {
+        return roadConstraction;
+    }
+    public void setRoadConstraction(RoadConstraction roadConstraction) {
+        this.roadConstraction = roadConstraction;
+    }
 
     public void helpOnClick(){
         helpAboutOpen("Help", "Help Error", false);
@@ -64,11 +73,12 @@ public class MainController {
     public void openOnClick(){
         FileChooser fileChooser = new FileChooser();
         File fileName = fileChooser.showOpenDialog(main.getScene().getWindow());
-        RoadConstraction roadConstraction;
 
         try(FileInputStream is = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(is)){
             roadConstraction = (RoadConstraction) ois.readObject();
+            RoadConstractionModel.setRoadConstraction(roadConstraction);
+            actionChooser(main);
         } catch (FileNotFoundException e) {e.printStackTrace();
         } catch (IOException e) {e.printStackTrace();
         } catch (ClassNotFoundException e) {e.printStackTrace();
@@ -77,6 +87,24 @@ public class MainController {
 
     public void closeOnClick(){
         System.exit(0);
+    }
+
+
+    public static void actionChooser(AnchorPane pane){
+        Stage actionChoose = new Stage();
+        actionChoose.setTitle("Дії з конструкцією дорожнього одягу");
+        actionChoose.setResizable(false);
+
+        AnchorPane actionChoosePane;
+        try {
+            actionChoosePane = FXMLLoader.load(MainController.class.getResource("/com/ntu/api/fx/model/main/actionChoose.fxml"));
+            actionChoose.initOwner(pane.getScene().getWindow());
+            actionChoose.initModality(Modality.WINDOW_MODAL);
+            actionChoose.setScene(new Scene(actionChoosePane));
+            actionChoose.show();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 
 }

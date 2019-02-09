@@ -28,10 +28,10 @@ public class Main {
         File file = new File(root + "/climateZoneList");
         writer.write(file, list);
 
-        DesigionLoad a1 = new DesigionLoad("A1", 130, 65.0, 0.9, 0.303, 0.346);
-        DesigionLoad a2 = new DesigionLoad("A2", 115, 57.5, 0.8, 0.303, 0.345);
-        DesigionLoad a3 = new DesigionLoad("A3", 100, 50.0, 0.6, 0.326, 0.371);
-        DesigionLoad b = new DesigionLoad("B", 60, 30.0, 0.5, 0.276, 0.315);
+        DesigionLoad a1 = new DesigionLoad("A1", 130, 65.0, 0.9, 0.303, 0.346, 0.0);
+        DesigionLoad a2 = new DesigionLoad("A2", 115, 57.5, 0.8, 0.303, 0.345, 315.68);
+        DesigionLoad a3 = new DesigionLoad("A3", 100, 50.0, 0.6, 0.326, 0.371, 350.21);
+        DesigionLoad b = new DesigionLoad("B", 60, 30.0, 0.5, 0.276, 0.315, 409.4);
 
         ArrayList<DesigionLoad> capital1 = new ArrayList<>();
         capital1.add(a1);
@@ -84,12 +84,12 @@ public class Main {
         writer.write(fileRoadType, roadTypes);
 
         ArrayList<Road> roadList = new ArrayList<>();
-        roadList.add(new Road("I-a", 0.97, 1.875, 1.39, 1.5, 1.51, 0.12, 0.17, 0.16, 0.12, 0.08, 0.12, 1.97, type1_2));
-        roadList.add(new Road("I-b", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2));
-        roadList.add(new Road("II", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2));
-        roadList.add(new Road("III", 0.9, 1.28, 1.29, 1.33, 1.4, 0.14, 0.18, 0.2, 0.14, 0.1, 0.14, 1.32, type3));
-        roadList.add(new Road("IV", 0.85, 1.035, 1.27, 1.29, 1.38, 0.16, 0.2, 0.24, 0.16, 0.1, 0.16, 1.06, type4));
-        roadList.add(new Road("V", 0.75, 0.68, 1.19, 1.23, 1.25, 0.18, 0.26, 0.26, 0.18, 0.1, 0.18, 0.86, type5));
+        roadList.add(new Road("I-a", 0.97, 1.875, 1.39, 1.5, 1.51, 0.12, 0.17, 0.16, 0.12, 0.08, 0.12, 1.97, type1_2, 260,0,0));
+        roadList.add(new Road("I-b", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2, 250,0,0));
+        roadList.add(new Road("II", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2,235,0,0));
+        roadList.add(new Road("III", 0.9, 1.28, 1.29, 1.33, 1.4, 0.14, 0.18, 0.2, 0.14, 0.1, 0.14, 1.32, type3,225,190,0));
+        roadList.add(new Road("IV", 0.85, 1.035, 1.27, 1.29, 1.38, 0.16, 0.2, 0.24, 0.16, 0.1, 0.16, 1.06, type4,190,150,0));
+        roadList.add(new Road("V", 0.75, 0.68, 1.19, 1.23, 1.25, 0.18, 0.26, 0.26, 0.18, 0.1, 0.18, 0.86, type5,150,100,50));
 
         File fileRoad = new File(root + "/roadList");
         writer.write(fileRoad, roadList);

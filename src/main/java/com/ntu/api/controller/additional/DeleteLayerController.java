@@ -1,8 +1,8 @@
 package com.ntu.api.controller.additional;
 
+import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Lists;
-import com.ntu.api.domain.listCreate.Objects.Layers.RoadLayers;
-import com.ntu.api.model.RoadConstraction;
+import com.ntu.api.domain.RoadConstraction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,10 +29,11 @@ public class DeleteLayerController {
     TextArea layerPosition;
 
     private static ObservableList<String> layerList;
+    private RoadConstraction roadConstraction = InputController.getRoadConstraction();
 
     @FXML public void initialize(){
         layerList = FXCollections.observableArrayList();
-        layerList.addAll(RoadConstraction.layerTableStringList());
+        layerList.addAll(roadConstraction.layerTableStringList());
         layer.getItems().setAll(layerList);
     }
 
@@ -42,10 +43,10 @@ public class DeleteLayerController {
         layerDepth.setText("");
         layerPosition.setText("");
 
-        layerType.setText(RoadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getType());
-        layerConstraction.setText(RoadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getConstruction());
-        layerDepth.setText(RoadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getThickness().toString());
-        layerPosition.setText(RoadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getId().toString());
+        layerType.setText(roadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getType());
+        layerConstraction.setText(roadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getConstruction());
+        layerDepth.setText(roadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getThickness().toString());
+        layerPosition.setText(roadConstraction.layerTableList().get(layer.getSelectionModel().getSelectedIndex()).getId().toString());
     }
 
     @FXML private void cancelOnClick(){
@@ -54,9 +55,9 @@ public class DeleteLayerController {
     }
 
     @FXML private void deleteOnClick(){
-        ArrayList<String> position = RoadConstraction.positionCheck(layerType.getText());
-        int roadLayerskod = Lists.getRoadLayers().indexOf(RoadConstraction.roadLayersCheck(layerType.getText()));
-        RoadConstraction.getRoadLayers().get(roadLayerskod).getLayers().remove(position.indexOf(layerPosition.getText()));
+        ArrayList<String> position = roadConstraction.positionCheck(layerType.getText());
+        int roadLayerskod = Lists.getRoadLayers().indexOf(roadConstraction.roadLayersCheck(layerType.getText()));
+        roadConstraction.getRoadLayers().get(roadLayerskod).getLayers().remove(position.indexOf(layerPosition.getText()));
         okOnClick();
     }
 

@@ -1,8 +1,9 @@
 package com.ntu.api.controller.additional;
 
+import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
-import com.ntu.api.model.RoadConstraction;
+import com.ntu.api.domain.RoadConstraction;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,9 +26,10 @@ public class AddLayerController {
     private static ObservableList<String> layerDepthList;
 
     private static Layer layerConstractList;
+    private RoadConstraction roadConstraction = InputController.getRoadConstraction();
 
     @FXML public void initialize(){
-        RoadConstraction.layers();
+        roadConstraction.layers();
 
         layerTypeList = FXCollections.observableArrayList();
         layerConstractionList = FXCollections.observableArrayList();
@@ -59,9 +61,13 @@ public class AddLayerController {
     }
 
     @FXML public void layerConstractionOnClick() {
-        try{
-        boxClear(layerDepth);
-        layerDepth.getItems().setAll(depthList());}
+        try {
+            boxClear(layerDepth);
+            layerDepth.getItems().setAll(depthList());
+            if (depthList().size() == 1) {
+                layerDepth.promptTextProperty().set(depthList().get(0));
+            }
+        }
         catch (RuntimeException e){}
     }
 
@@ -79,13 +85,13 @@ public class AddLayerController {
 
     @FXML public void addOnClick() {
         try {
-            if (Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()) <
+            if(Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem())<
                     Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
                             getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness() ||
-                    Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()) >
+                    Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem())>
                             Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
-                                    getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness()) {
-                Message.errorCatch(addLayerPane, "Error", "Введена товщина шару дорожнього одягу є " +
+                                    getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness()){
+                Message.errorCatch(addLayerPane,"Error", "Введена товщина шару дорожнього одягу є " +
                         "недопустимою для даної конструкції шару дорожнього одягу.");
             } else {
                 try {
@@ -94,20 +100,20 @@ public class AddLayerController {
                     temp.setThickness(Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()));
                     if (layerType.getSelectionModel().getSelectedIndex() == 0) {
                         temp.setThicknessVariationCoeficient(2.84 / (10.2 + temp.getThickness()));
-                        RoadConstraction.getBituminous().add((Bituminous) temp);
+                        roadConstraction.getBituminous().add((Bituminous) temp);
                     } else {
                         temp.setThicknessVariationCoeficient(2.84 / (5.6 + temp.getThickness()));
                         if (layerType.getSelectionModel().getSelectedIndex() == 1) {
-                            RoadConstraction.getStrengthenedMaterials().add((StrengthenedMaterial) temp);
+                            roadConstraction.getStrengthenedMaterials().add((StrengthenedMaterial) temp);
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 2) {
-                            RoadConstraction.getUnstrengthenedMaterialsCover().add((UnstrengthenedMaterial) temp);
+                            roadConstraction.getUnstrengthenedMaterialsCover().add((UnstrengthenedMaterial) temp);
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 3) {
-                            RoadConstraction.getUnstrengthenedMaterialsBase().add((UnstrengthenedMaterial) temp);
+                            roadConstraction.getUnstrengthenedMaterialsBase().add((UnstrengthenedMaterial) temp);
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 4) {
-                            RoadConstraction.getSands().add((Sand) temp);
+                            roadConstraction.getSands().add((Sand) temp);
                         }
                     }
-                    RoadConstraction.layers();
+                    roadConstraction.layers();
                     okOnClick();
                 } catch (RuntimeException e) {
                 }
@@ -134,7 +140,7 @@ public class AddLayerController {
                 getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness();
         Double finish = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
                 getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness();
-        return RoadConstraction.depthList(start, finish);
+        return roadConstraction.depthList(start, finish);
     }
 
     private void okOnClick(){
