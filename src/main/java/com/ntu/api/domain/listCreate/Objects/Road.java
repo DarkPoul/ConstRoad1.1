@@ -25,6 +25,17 @@ public class Road extends Element implements Serializable {
     * minElasticModulCapital - мінімальний потрібний модуль пружності МПа для капітального типу дорожнього одягу
     * minElasticModulLite - мінімальний потрібний модуль пружності МПа для вдосконаленого полекшеного типу дорожнього одягу
     * minElasticModulTransfer - мінімальний потрібний модуль пружності МПа для перехідного типу дорожнього одягу
+    * neededElasticBaseModul - потрібний модуль пружності основи
+    * k4Koeficient - коефіцієнт к4
+    * lanesNumber - кількість смуг руху
+    * laneWidth - ширина смуги руху
+    * roadsideWidth - ширина узбіччя
+    * stopLaneWidth - ширина зупиночної смуги разом з укріпленою смугою
+    * fortifiedLaneWidth - ширина укріпленої смуги
+    * dividingLaneWidth - ширина розділювальної смуги
+    * dividingFortifiedLaneWidth - ширина укріпленої смуги на розділювальній смузі
+    * estimatedProspectiveTrafficIntensityInTransportUnits - розрахункова перспективна інтенсивність руху у транспотних одиницях, авт/добу
+    * estimatedProspectiveTrafficIntensityInReducedUnits - розрахункова перспективна інтенсивність руху у приведених одиницях до легкового автомобіля, авт/добу
     * */
 
     private String name;
@@ -44,6 +55,17 @@ public class Road extends Element implements Serializable {
     private Integer minElasticModulCapital;
     private Integer minElasticModulLite;
     private Integer minElasticModulTransfer;
+    private Integer neededElasticBaseModul;
+    private Double k4Koeficient;
+    private ArrayList<Integer> lanesNumber;
+    private Double laneWidth;
+    private Double roadsideWidth;
+    private Double stopLaneWidth;
+    private Double fortifiedLaneWidth;
+    private Double dividingLaneWidth;
+    private Double dividingFortifiedLaneWidth;
+    private String estimatedProspectiveTrafficIntensityInTransportUnits;
+    private String estimatedProspectiveTrafficIntensityInReducedUnits;
 
     @Override
     public String getName() {
@@ -97,11 +119,48 @@ public class Road extends Element implements Serializable {
     public Integer getMinElasticModulTransfer() {
         return minElasticModulTransfer;
     }
+    public Integer getNeededElasticBaseModul() {
+        return neededElasticBaseModul;
+    }
+    public Double getK4Koeficient() {
+        return k4Koeficient;
+    }
+    public ArrayList<Integer> getLanesNumber() {
+        return lanesNumber;
+    }
+    public Double getLaneWidth() {
+        return laneWidth;
+    }
+    public Double getRoadsideWidth() {
+        return roadsideWidth;
+    }
+    public Double getStopLaneWidth() {
+        return stopLaneWidth;
+    }
+    public Double getFortifiedLaneWidth() {
+        return fortifiedLaneWidth;
+    }
+    public Double getDividingLaneWidth() {
+        return dividingLaneWidth;
+    }
+    public Double getDividingFortifiedLaneWidth() {
+        return dividingFortifiedLaneWidth;
+    }
+    public String getEstimatedProspectiveTrafficIntensityInTransportUnits() {
+        return estimatedProspectiveTrafficIntensityInTransportUnits;
+    }
+    public String getEstimatedProspectiveTrafficIntensityInReducedUnits() {
+        return estimatedProspectiveTrafficIntensityInReducedUnits;
+    }
 
     public Road(String name, Double kN, Double b, Double rBend, Double rDefl, Double rOffset, Double crBend,
                 Double crDefl, Double crOffset, Double cS, Double cR, Double cT, Double kStudent,
                 ArrayList<RoadType> roadType, Integer minElasticModulCapital, Integer minElasticModulLite,
-                Integer minElasticModulTransfer) {
+                Integer minElasticModulTransfer, Integer neededElasticBaseModul, Double k4Koeficient,
+                ArrayList<Integer> lanesNumber, Double laneWidth, Double roadsideWidth, Double stopLaneWidth,
+                Double fortifiedLaneWidth, Double dividingLaneWidth, Double dividingFortifiedLaneWidth,
+                String estimatedProspectiveTrafficIntensityInTransportUnits,
+                String estimatedProspectiveTrafficIntensityInReducedUnits) {
         this.name = name;
         this.kN = kN;
         this.b = b;
@@ -119,6 +178,17 @@ public class Road extends Element implements Serializable {
         this.minElasticModulCapital = minElasticModulCapital;
         this.minElasticModulLite = minElasticModulLite;
         this.minElasticModulTransfer = minElasticModulTransfer;
+        this.neededElasticBaseModul = neededElasticBaseModul;
+        this.k4Koeficient = k4Koeficient;
+        this.lanesNumber = lanesNumber;
+        this.laneWidth = laneWidth;
+        this.roadsideWidth = roadsideWidth;
+        this.stopLaneWidth = stopLaneWidth;
+        this.fortifiedLaneWidth = fortifiedLaneWidth;
+        this.dividingLaneWidth = dividingLaneWidth;
+        this.dividingFortifiedLaneWidth = dividingFortifiedLaneWidth;
+        this.estimatedProspectiveTrafficIntensityInTransportUnits = estimatedProspectiveTrafficIntensityInTransportUnits;
+        this.estimatedProspectiveTrafficIntensityInReducedUnits = estimatedProspectiveTrafficIntensityInReducedUnits;
     }
 
     @Override
@@ -138,7 +208,21 @@ public class Road extends Element implements Serializable {
         sb.append(", cT=").append(cT);
         sb.append(", kStudent=").append(kStudent);
         sb.append(", roadType=").append(roadType);
-        sb.append("}\n");
+        sb.append(", minElasticModulCapital=").append(minElasticModulCapital);
+        sb.append(", minElasticModulLite=").append(minElasticModulLite);
+        sb.append(", minElasticModulTransfer=").append(minElasticModulTransfer);
+        sb.append(", neededElasticBaseModul=").append(neededElasticBaseModul);
+        sb.append(", k4Koeficient=").append(k4Koeficient);
+        sb.append(", lanesNumber=").append(lanesNumber);
+        sb.append(", laneWidth=").append(laneWidth);
+        sb.append(", roadsideWidth=").append(roadsideWidth);
+        sb.append(", stopLaneWidth=").append(stopLaneWidth);
+        sb.append(", fortifiedLaneWidth=").append(fortifiedLaneWidth);
+        sb.append(", dividingLaneWidth=").append(dividingLaneWidth);
+        sb.append(", dividingFortifiedLaneWidth=").append(dividingFortifiedLaneWidth);
+        sb.append(", estimatedProspectiveTrafficIntensityInTransportUnits='").append(estimatedProspectiveTrafficIntensityInTransportUnits).append('\'');
+        sb.append(", estimatedProspectiveTrafficIntensityInReducedUnits='").append(estimatedProspectiveTrafficIntensityInReducedUnits).append('\'');
+        sb.append('}');
         return sb.toString();
     }
 }

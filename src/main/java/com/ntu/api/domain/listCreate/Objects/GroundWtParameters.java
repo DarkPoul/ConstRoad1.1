@@ -34,6 +34,8 @@ public class GroundWtParameters extends Element implements Serializable {
         return cGr;
     }
 
+    public GroundWtParameters(){}
+
     public GroundWtParameters(String name, Double wt, Double eGr, Double fi, Double cGr) {
         this.name = name;
         this.wt = wt;

@@ -429,9 +429,10 @@ public class InputController {
     public void groundCorrectionOnClick(){
         try{
             roadConstraction.setGroundCorection(Lists.getGroundCorrection().get(groundCorrectionBox.getSelectionModel().getSelectedIndex()));
-            RoadConstractionModel.estimatedGroundMoisture();
         }
-        catch (RuntimeException e){}
+        catch (RuntimeException e){
+            Message.errorCatch(inputPane,"Error", "Ground correction error");
+        }
     }
 
     private void groundCheck(){

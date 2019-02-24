@@ -51,6 +51,7 @@ public class Ground extends Element implements Serializable {
         return wT;
     }
 
+
     public Ground(String name, String plasticNumber, String sanPartNumber, Double k3, Double kCfi, Double kCeg, ArrayList<GroundWtParameters> wT) {
         this.name = name;
         this.plasticNumber = plasticNumber;

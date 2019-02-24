@@ -83,13 +83,29 @@ public class Main {
         File fileRoadType = new File(root + "/roadTypeList");
         writer.write(fileRoadType, roadTypes);
 
+        ArrayList<Integer> lanesNumber1a = new ArrayList<>();
+        lanesNumber1a.add(4);
+        lanesNumber1a.add(6);
+        lanesNumber1a.add(8);
+        ArrayList<Integer> lanesNumber1b = new ArrayList<>();
+        lanesNumber1b.add(4);
+        lanesNumber1b.add(6);
+        ArrayList<Integer> lanesNumber2 = new ArrayList<>();
+        lanesNumber2.add(2);
+        ArrayList<Integer> lanesNumber3 = new ArrayList<>();
+        lanesNumber3.add(2);
+        ArrayList<Integer> lanesNumber4 = new ArrayList<>();
+        lanesNumber4.add(2);
+        ArrayList<Integer> lanesNumber5 = new ArrayList<>();
+        lanesNumber5.add(1);
+
         ArrayList<Road> roadList = new ArrayList<>();
-        roadList.add(new Road("I-a", 0.97, 1.875, 1.39, 1.5, 1.51, 0.12, 0.17, 0.16, 0.12, 0.08, 0.12, 1.97, type1_2, 260,0,0));
-        roadList.add(new Road("I-b", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2, 250,0,0));
-        roadList.add(new Road("II", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2,235,0,0));
-        roadList.add(new Road("III", 0.9, 1.28, 1.29, 1.33, 1.4, 0.14, 0.18, 0.2, 0.14, 0.1, 0.14, 1.32, type3,225,190,0));
-        roadList.add(new Road("IV", 0.85, 1.035, 1.27, 1.29, 1.38, 0.16, 0.2, 0.24, 0.16, 0.1, 0.16, 1.06, type4,190,150,0));
-        roadList.add(new Road("V", 0.75, 0.68, 1.19, 1.23, 1.25, 0.18, 0.26, 0.26, 0.18, 0.1, 0.18, 0.86, type5,150,100,50));
+        roadList.add(new Road("I-a", 0.97, 1.875, 1.39, 1.5, 1.51, 0.12, 0.17, 0.16, 0.12, 0.08, 0.12, 1.97, type1_2, 260,0,0,150,1.51,lanesNumber1a,3.75d,3.75d,2.5d,0.75d,6.0d,0.75d, "понад 10000", "понад 14000"));
+        roadList.add(new Road("I-b", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2, 250,0,0,150,1.57,lanesNumber1b,3.75d,3.75d,2.5d,0.5d,3.0d,0.5d, "понад 10000", "понад 14000"));
+        roadList.add(new Road("II", 0.95, 1.645, 1.35, 1.43, 1.48, 0.12, 0.17, 0.18, 0.14, 0.1, 0.12, 1.71, type1_2,235,0,0,120,1.57,lanesNumber2,3.75d,3.75d,2.5d,0.5d,0.0d,0.0d, "від 3000 до 10000", "від 5000 до 14000"));
+        roadList.add(new Road("III", 0.9, 1.28, 1.29, 1.33, 1.4, 0.14, 0.18, 0.2, 0.14, 0.1, 0.14, 1.32, type3,225,190,0,120,1.57,lanesNumber3,3.5d,2.5d,0.0d,0.5d,0.0d,0.0d,"від 1000 до 3000", "від 2000 до 5000"));
+        roadList.add(new Road("IV", 0.85, 1.035, 1.27, 1.29, 1.38, 0.16, 0.2, 0.24, 0.16, 0.1, 0.16, 1.06, type4,190,150,0,80,1.57,lanesNumber4,3.0d,2.0d,0.0d,0.5d,0.0d,0.0d,"від 150 до 1000", "від 300 до 2500"));
+        roadList.add(new Road("V", 0.75, 0.68, 1.19, 1.23, 1.25, 0.18, 0.26, 0.26, 0.18, 0.1, 0.18, 0.86, type5,150,100,50,0,1.98,lanesNumber5,4.5d,1.75d,0.0d,0.0d,0.0d,0.0d, "до 150", "300"));
 
         File fileRoad = new File(root + "/roadList");
         writer.write(fileRoad, roadList);
@@ -369,6 +385,7 @@ public class Main {
         writer.write(fileground, grounds);
 
         ArrayList<GroundCorection> groundCor = new ArrayList<>();
+        groundCor.add(new GroundCorection("Відсутній", 0.0, 0.0, 0.0, 0.0));
         groundCor.add(new GroundCorection("W1 голкопробивний геотекстиль в контакті з грунтами", 0.03, 0.03, 0.03, 0.03));
         groundCor.add(new GroundCorection("W2 голкопробивний геотекстиль в контакті з грунтами", 0.06, 0.06, 0.06, 0.06));
         groundCor.add(new GroundCorection("W3 голкопробивний геотекстиль в контакті з суглинками і глинами", 0.05, 0.05, 0.05, 0.04));
@@ -871,32 +888,32 @@ public class Main {
         writer.write(layersName,layersNames);
 
 
-        System.out.println(Lists.getRbczList());
-        System.out.println(Lists.getRbczName());
-        System.out.println(Lists.getRoadList());
-        System.out.println(Lists.getRoadName());
-        System.out.println(Lists.getGroundType());
-        System.out.println(Lists.getSoilName());
-        System.out.println(Lists.getSoilList());
-        System.out.println(Lists.getGrounds());
-        System.out.println(Lists.getGroundsName());
-        System.out.println(Lists.getRoadTypeList());
-        System.out.println(Lists.getRoadGroundLoad());
-        System.out.println(Lists.getGroundCorrection());
-        System.out.println(Lists.getGroundCorrectionName());
-        System.out.println(Lists.getBituminousList());
-        System.out.println(Lists.getBituminousName());
-        System.out.println(Lists.getStrengthenedMaterialsList());
-        System.out.println(Lists.getStrengthenedMaterialsName());
-        System.out.println(Lists.getUnstrengthenedMaterialsCoverList());
-        System.out.println(Lists.getUnstrengthenedMaterialsCoverName());
-        System.out.println(Lists.getUnstrengthenedMaterialsBaseList());
-        System.out.println(Lists.getUnstrengthenedMaterialsBaseName());
-        System.out.println(Lists.getSands());
-        System.out.println(Lists.getSandsName());
-        System.out.println(Lists.getRoadLayers());
-        System.out.println(Lists.getRoadLayersName());
-        System.out.println(Lists.getLayersList());
+//        System.out.println(Lists.getRbczList());
+//        System.out.println(Lists.getRbczName());
+//        System.out.println(Lists.getRoadList());
+//        System.out.println(Lists.getRoadName());
+//        System.out.println(Lists.getGroundType());
+//        System.out.println(Lists.getSoilName());
+//        System.out.println(Lists.getSoilList());
+//        System.out.println(Lists.getGrounds());
+//        System.out.println(Lists.getGroundsName());
+//        System.out.println(Lists.getRoadTypeList());
+//        System.out.println(Lists.getRoadGroundLoad());
+//        System.out.println(Lists.getGroundCorrection());
+//        System.out.println(Lists.getGroundCorrectionName());
+//        System.out.println(Lists.getBituminousList());
+//        System.out.println(Lists.getBituminousName());
+//        System.out.println(Lists.getStrengthenedMaterialsList());
+//        System.out.println(Lists.getStrengthenedMaterialsName());
+//        System.out.println(Lists.getUnstrengthenedMaterialsCoverList());
+//        System.out.println(Lists.getUnstrengthenedMaterialsCoverName());
+//        System.out.println(Lists.getUnstrengthenedMaterialsBaseList());
+//        System.out.println(Lists.getUnstrengthenedMaterialsBaseName());
+//        System.out.println(Lists.getSands());
+//        System.out.println(Lists.getSandsName());
+//        System.out.println(Lists.getRoadLayers());
+//        System.out.println(Lists.getRoadLayersName());
+//        System.out.println(Lists.getLayersList());
 
 
     }

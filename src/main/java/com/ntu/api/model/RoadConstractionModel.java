@@ -182,10 +182,8 @@ public class RoadConstractionModel {
         Double moisture = (roadConstraction.getHumidity()-roadConstraction.getCorrection())
                 *(1+roadConstraction.getRoad().getkStudent()*humidityVariationCoeficient);
         roadConstraction.setEstimatedGroundMoisture(moisture);
-        System.out.println(roadConstraction.getEstimatedGroundMoisture());
         wTg = estimatedParameters(roadConstraction.getGround().getwT(), roadConstraction.getEstimatedGroundMoisture());
         roadConstraction.setEstimatedGroundWt(wTg);
-        System.out.println(roadConstraction.getEstimatedGroundWt());
     }
 
 //    метод визначення розрахугковох вологості нев'язкого шару (піску)
@@ -247,6 +245,8 @@ public class RoadConstractionModel {
 
 //    метод проведення попередніх розрахунків
     public static void preCalculation(){
+        System.out.println("precalculation");
+        estimatedGroundMoisture();
         estimatedSandMoisture();
         nominalDynamicLoad = dinamicKoeficient*roadConstraction.getDesigionLoad().getStaticLoadAxis();
         calculatedDailyIntensity = roadConstraction.getPassageNumber()/roadConstraction.getOperationTime()/roadConstraction.getRbcz().getCheckoutDay();
