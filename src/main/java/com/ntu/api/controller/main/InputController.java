@@ -293,9 +293,8 @@ public class InputController {
             roadConstraction.setOperationTime(Double.parseDouble(operationTerm.getText()));
             roadConstraction.setPassageNumber(Double.parseDouble(passageNumber.getText()));
             roadConstraction.setTotalLayersThickness(RoadConstractionModel.totalLayersThickness(roadConstraction));
-            roadConstraction.setEstimatedGroundMoisture(RoadConstractionModel.estimatedGroundMoisture());
-            roadConstraction.setEstimatedSandMoisture(RoadConstractionModel.estimatedSandMoisture());
-            RoadConstractionModel.estimatedGroundParameters();
+            RoadConstractionModel.preCalculation();
+            RoadConstractionModel.minElasticModuleChoose();
 
             FileChooser chooser = new FileChooser();
             File fileName = chooser.showSaveDialog(inputPane.getScene().getWindow());
@@ -327,14 +326,25 @@ public class InputController {
         catch (RuntimeException e){}
     }
     public void roadOnClick(){
+        ArrayList<Integer> newRoadLinesList = new ArrayList<>();
         boxClear(roadTypeBox);
         boxClear(dessigionLoadBox);
+        boxClear(roadLinesBox);
 
         listNameClear(newLoadTypeList);
         listNameClear(newRoadTypeList);
         listObjectClear(roadTypes);
         listObjectClear(desigionLoads);
+
         roadConstraction.setRoad(Lists.getRoadList().get(roadBox.getSelectionModel().getSelectedIndex()));
+        newRoadLinesList.addAll(roadConstraction.getRoad().getLanesNumber());
+        roadLinesBox.getItems().setAll(listToString(newRoadLinesList));
+
+        if(newRoadLinesList.size()==1){
+            roadLinesBox.promptTextProperty().set(newRoadLinesList.get(0).toString());
+            roadConstraction.setRoadLines(roadConstraction.checkRoadLines(roadConstraction.getRoad().getLanesNumber()).get(0));
+        }
+
         for(RoadType roadType: roadConstraction.getRoad().getRoadType()){
             newRoadTypeList.add(roadType.getName());
             roadTypes.add(roadType);
@@ -372,7 +382,6 @@ public class InputController {
     public void groundTypeOnClick(){
         try {
             boxClear(groundBox);
-//            boxClear(groundTypeBox);
             roadConstraction.setGroundType(roadConstraction.getSoils().getSoilTypes().get(groundTypeBox.getSelectionModel().getSelectedIndex()));
             groundCheck();
         }
@@ -412,7 +421,7 @@ public class InputController {
 
     public void roadLinesOnClick(){
         try{
-            roadConstraction.setRoadLines(Lists.getRoadLines().get(roadLinesBox.getSelectionModel().getSelectedIndex()));
+            roadConstraction.setRoadLines(roadConstraction.checkRoadLines(roadConstraction.getRoad().getLanesNumber()).get(roadLinesBox.getSelectionModel().getSelectedIndex()));
         }
         catch (RuntimeException e){}
     }
@@ -420,6 +429,7 @@ public class InputController {
     public void groundCorrectionOnClick(){
         try{
             roadConstraction.setGroundCorection(Lists.getGroundCorrection().get(groundCorrectionBox.getSelectionModel().getSelectedIndex()));
+            RoadConstractionModel.estimatedGroundMoisture();
         }
         catch (RuntimeException e){}
     }
@@ -454,5 +464,13 @@ public class InputController {
     private void boxClear(ComboBox<String> box){
         box.promptTextProperty().setValue(null);
         box.setValue(null);
+    }
+
+    private ArrayList<String> listToString(ArrayList<Integer> list){
+        ArrayList<String> stringList = new ArrayList<>();
+        for(Integer el:list){
+            stringList.add(el.toString());
+        }
+        return stringList;
     }
 }

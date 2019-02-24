@@ -360,7 +360,7 @@
                               <RowConstraints maxHeight="71.0" minHeight="0.0" prefHeight="68.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="?" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                              <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#operationTimeOnClick" text="+" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="15.0" />
                                  </font>

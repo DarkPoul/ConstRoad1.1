@@ -98,7 +98,7 @@
                               <Font size="18.0" />
                            </font>
                         </Button>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openOnClick" text="Відкрити збереженої конструкції дорожнього покриття" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openOnClick" text="Відкрити збережену конструкцію дорожнього покриття" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
                            <font>
                               <Font size="18.0" />
                            </font>

@@ -27,8 +27,9 @@ public class RoadConstraction extends Element implements Serializable {
     * operationTime - Строк експлуатації до капітального ремонту, років
     * passageNumber - Сумарна кількість проїздів розрахункового навантаження за строк служби
     * estimatedGroundMoisture - розрахункова вологість грунту
-    * estimatedSandMoisture - розрахункова вологість невязкого середовища (піску)
+    * estimatedGroundWt - розрахункова вологість грунту
     * minElasticModule - мінімальний портрібний модуль пружності МПа для дорожнього одягу
+    *
     * elasticModele - наявний модуль пружності
     * neededElasticModule - необхідний модуль пружності
     */
@@ -47,13 +48,11 @@ public class RoadConstraction extends Element implements Serializable {
     private double operationTime;
     private double passageNumber;
     private double estimatedGroundMoisture;
-    private double estimatedSandMoisture;
+    private GroundWtParameters estimatedGroundWt;
     private static Double elasticModele;
     private static Double neededElasticModule;
-    private final Integer staticLoadDuration = 600;
-    private final Double dinamicLoadDuration = 0.1;
-    private final Double humidityVariationCoeficient = 0.1;
     private double totalLayersThickness;
+    private int minElasticModule;
 
 
     private ArrayList<Bituminous> bituminous= new ArrayList<>();
@@ -186,21 +185,6 @@ public class RoadConstraction extends Element implements Serializable {
     public void setEstimatedGroundMoisture(double estimatedGroundMoisture) {
         this.estimatedGroundMoisture = estimatedGroundMoisture;
     }
-    public double getEstimatedSandMoisture() {
-        return estimatedSandMoisture;
-    }
-    public void setEstimatedSandMoisture(double estimatedSandMoisture) {
-        this.estimatedSandMoisture = estimatedSandMoisture;
-    }
-    public Integer getStaticLoadDuration() {
-        return staticLoadDuration;
-    }
-    public Double getDinamicLoadDuration() {
-        return dinamicLoadDuration;
-    }
-    public Double getHumidityVariationCoeficient() {
-        return humidityVariationCoeficient;
-    }
     public double getTotalLayersThickness() {
         return totalLayersThickness;
     }
@@ -218,6 +202,18 @@ public class RoadConstraction extends Element implements Serializable {
     }
     public static void setNeededElasticModule(Double neededElasticModule) {
         RoadConstraction.neededElasticModule = neededElasticModule;
+    }
+    public int getMinElasticModule() {
+        return minElasticModule;
+    }
+    public void setMinElasticModule(int minElasticModule) {
+        this.minElasticModule = minElasticModule;
+    }
+    public GroundWtParameters getEstimatedGroundWt() {
+        return estimatedGroundWt;
+    }
+    public void setEstimatedGroundWt(GroundWtParameters estimatedGroundWt) {
+        this.estimatedGroundWt = estimatedGroundWt;
     }
 
     @Override
@@ -345,4 +341,42 @@ public class RoadConstraction extends Element implements Serializable {
         return positionList;
     }
 
+//    метод для формування списку смуг руху
+    public ArrayList<RoadLines> checkRoadLines(ArrayList<Integer> roadLines){
+        ArrayList<RoadLines> checkedRoadLines = new ArrayList<>();
+        for(RoadLines lines: Lists.getRoadLines()){
+            for (Integer element: roadLines){
+                if(lines.getNumberLines().equals(element)){
+                    checkedRoadLines.add(lines);
+                }
+            }
+        }
+        return checkedRoadLines;
+    }
+
+//    метод формування списку шарів дорожнього одягу без шарів нев'язкого середовища
+//    метод використовується при розрахунку загального модуля пружності
+    public ArrayList<Layer> getLayerList(){
+        ArrayList<Layer> temp = new ArrayList<>();
+        for(RoadLayers roadLar: roadLayers){
+            if(!roadLar.getName().equals("Шар нев'язкого середовища")) {
+                for (Layer layer : roadLar.getLayers()) {
+                    temp.add(layer);
+                }
+            }
+        }
+        return temp;
+    }
+
+//    метод формування повного списку шарів дорожнього одягу
+//    метод використовується при розрахунку загального модуля пружності
+    public ArrayList<Layer> getTotalLayerList(){
+        ArrayList<Layer> temp = new ArrayList<>();
+        for(RoadLayers roadLar: roadLayers){
+                for (Layer layer : roadLar.getLayers()) {
+                    temp.add(layer);
+                }
+        }
+        return temp;
+    }
 }

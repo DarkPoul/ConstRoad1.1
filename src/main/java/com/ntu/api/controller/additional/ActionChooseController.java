@@ -1,6 +1,7 @@
 package com.ntu.api.controller.additional;
 
 import com.ntu.api.domain.Message;
+import com.ntu.api.domain.RoadConstraction;
 import com.ntu.api.model.RoadConstractionModel;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -8,8 +9,8 @@ import javafx.scene.layout.AnchorPane;
 public class ActionChooseController {
     @FXML AnchorPane actionChoosePane;
     @FXML private void initialize(){
-        System.out.println(RoadConstractionModel.getRoadConstraction().getEstimatedGroundMoisture());
-        System.out.println(RoadConstractionModel.getRoadConstraction().getEstimatedSandMoisture());
+        RoadConstractionModel.preCalculation();
+
     }
 
     @FXML private void analysisOnClick(){
@@ -17,7 +18,8 @@ public class ActionChooseController {
             Message.errorCatch(actionChoosePane,"Попередження", "Для розрахункового навантаження А1 " +
                     "розрахунок конструкції нежорсткого одягу за критерієм загального молудя пружності не виконується");
         }
-        else { RoadConstractionModel.elasticDeflectionCalculation(); }
+        else {
+            System.out.println(RoadConstractionModel.elasticDeflectionCalculation()); }
 
     }
 

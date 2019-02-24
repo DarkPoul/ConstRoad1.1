@@ -4,7 +4,9 @@ import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
+import com.ntu.api.domain.listCreate.Objects.ElasticModul;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
+import com.ntu.api.model.RoadConstractionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -63,9 +65,11 @@ public class AddLayerController {
     @FXML public void layerConstractionOnClick() {
         try {
             boxClear(layerDepth);
-            layerDepth.getItems().setAll(depthList());
-            if (depthList().size() == 1) {
+            ArrayList<String> depthList = depthList();
+            layerDepth.getItems().setAll(depthList);
+            if (depthList.size() == 1) {
                 layerDepth.promptTextProperty().set(depthList().get(0));
+                layerDepth.setValue(layerDepth.promptTextProperty().get());
             }
         }
         catch (RuntimeException e){}
@@ -90,7 +94,8 @@ public class AddLayerController {
                             getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness() ||
                     Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem())>
                             Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
-                                    getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness()){
+                                    getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness())
+            {
                 Message.errorCatch(addLayerPane,"Error", "Введена товщина шару дорожнього одягу є " +
                         "недопустимою для даної конструкції шару дорожнього одягу.");
             } else {
@@ -100,16 +105,29 @@ public class AddLayerController {
                     temp.setThickness(Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()));
                     if (layerType.getSelectionModel().getSelectedIndex() == 0) {
                         temp.setThicknessVariationCoeficient(2.84 / (10.2 + temp.getThickness()));
-                        roadConstraction.getBituminous().add((Bituminous) temp);
+                        Bituminous tempBitum = (Bituminous) temp;
+                        tempBitum.setElasticModuleDeflection((double)tempBitum.getShortElasticModuls().get(0).getElasticModule());
+                        tempBitum.setElasticModuleMovement(elasticModuleMovementChoose(tempBitum));
+                        roadConstraction.getBituminous().add(tempBitum);
                     } else {
                         temp.setThicknessVariationCoeficient(2.84 / (5.6 + temp.getThickness()));
                         if (layerType.getSelectionModel().getSelectedIndex() == 1) {
-                            roadConstraction.getStrengthenedMaterials().add((StrengthenedMaterial) temp);
+                            StrengthenedMaterial tempStrengthMaterial = (StrengthenedMaterial) temp;
+                            tempStrengthMaterial.setElasticModuleDeflection((double)tempStrengthMaterial.getElasticityModul());
+                            tempStrengthMaterial.setElasticModuleMovement((double)tempStrengthMaterial.getElasticityModul());
+                            roadConstraction.getStrengthenedMaterials().add(tempStrengthMaterial);
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 2) {
+                            UnstrengthenedMaterial tempUnstrengthenedMaterial = (UnstrengthenedMaterial)temp;
+                            tempUnstrengthenedMaterial.setElasticModuleDeflection((double)tempUnstrengthenedMaterial.getElasticityModul());
+                            tempUnstrengthenedMaterial.setElasticModuleMovement((double)tempUnstrengthenedMaterial.getElasticityModul());
                             roadConstraction.getUnstrengthenedMaterialsCover().add((UnstrengthenedMaterial) temp);
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 3) {
+                            UnstrengthenedMaterial tempUnstrengthenedMaterial = (UnstrengthenedMaterial)temp;
+                            tempUnstrengthenedMaterial.setElasticModuleDeflection((double)tempUnstrengthenedMaterial.getElasticityModul());
+                            tempUnstrengthenedMaterial.setElasticModuleMovement((double)tempUnstrengthenedMaterial.getElasticityModul());
                             roadConstraction.getUnstrengthenedMaterialsBase().add((UnstrengthenedMaterial) temp);
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 4) {
+                            Sand tempSand = (Sand)temp;
                             roadConstraction.getSands().add((Sand) temp);
                         }
                     }
@@ -141,6 +159,16 @@ public class AddLayerController {
         Double finish = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
                 getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness();
         return roadConstraction.depthList(start, finish);
+    }
+
+    private Double elasticModuleMovementChoose(Bituminous bitum){
+        Double elasticModuleMovement = 0.0;
+        for(ElasticModul modul: bitum.getShortElasticModuls()){
+            if(modul.getTemperature().equals(roadConstraction.getRbcz().getCalculatedTemperature())){
+                elasticModuleMovement = (double)modul.getElasticModule();
+            }
+        }
+        return elasticModuleMovement;
     }
 
     private void okOnClick(){
