@@ -13,6 +13,8 @@ public class UnstrengthenedMaterial extends Layer implements Serializable {
     coefficientFriction - крефіцієнт зчеплення Сзч
     thickness - товщина
     thicknessVariationCoefficient - коефіцієнт варіації товщини шару
+    elasticModuleDeflection - модуль пружності при прогину
+    elasticModuleMovement - модуль пружності при зсуві
     * */
 
     private String name;
@@ -26,7 +28,8 @@ public class UnstrengthenedMaterial extends Layer implements Serializable {
     private Double cost;
     private Double thickness;
     private Double thicknessVariationCoeficient;
-
+    private Double elasticModuleDeflection;
+    private Double elasticModuleMovement;
 
     public UnstrengthenedMaterial(String name, String material, Integer elasticityModul, Double variationCoefficientCE,
                                   Double angle, Double coefficientFriction, Double minThickness, Double maxThickness,
@@ -121,6 +124,22 @@ public class UnstrengthenedMaterial extends Layer implements Serializable {
     @Override
     public void setThicknessVariationCoeficient(Double thicknessVariationCoeficient) {
         this.thicknessVariationCoeficient = thicknessVariationCoeficient;
+    }
+    @Override
+    public Double getElasticModuleDeflection() {
+        return elasticModuleDeflection;
+    }
+    @Override
+    public void setElasticModuleDeflection(Double elasticModuleDeflection) {
+        this.elasticModuleDeflection = elasticModuleDeflection;
+    }
+    @Override
+    public Double getElasticModuleMovement() {
+        return elasticModuleMovement;
+    }
+    @Override
+    public void setElasticModuleMovement(Double elasticModuleMovement) {
+        this.elasticModuleMovement = elasticModuleMovement;
     }
 
     @Override

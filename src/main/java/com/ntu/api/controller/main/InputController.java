@@ -289,12 +289,10 @@ public class InputController {
 
     public void addOnClick(){
         try {
-            RoadConstractionModel.setRoadConstraction(roadConstraction);
             roadConstraction.setOperationTime(Double.parseDouble(operationTerm.getText()));
             roadConstraction.setPassageNumber(Double.parseDouble(passageNumber.getText()));
             roadConstraction.setTotalLayersThickness(RoadConstractionModel.totalLayersThickness(roadConstraction));
-            RoadConstractionModel.preCalculation();
-            RoadConstractionModel.minElasticModuleChoose();
+            RoadConstractionModel.setRoadConstraction(roadConstraction);
 
             FileChooser chooser = new FileChooser();
             File fileName = chooser.showSaveDialog(inputPane.getScene().getWindow());

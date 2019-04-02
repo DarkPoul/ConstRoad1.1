@@ -182,12 +182,19 @@ public class Lists {
         return strList;
     }
 
-    private static <T extends Layer> ArrayList<String> nameLayerList(ArrayList<T> list){
+    private static <T extends Layer> ArrayList<String> nameLayerList(ArrayList<T> list) {
         ArrayList<String> strList = new ArrayList<>();
-        for(T el: list){
-            strList.add(el.getName() + " " + el.getMaterial());
+        for (T el : list) {
+            if (el.getClass() == Bituminous.class) {
+                Bituminous bit = (Bituminous) el;
+                strList.add(bit.getName() + " " + bit.getMaterial() + " " + bit.getBindingMark());
+            } else if (el.getClass() == StrengthenedMaterial.class) {
+                StrengthenedMaterial strM = (StrengthenedMaterial) el;
+                strList.add(strM.getName() + " " + strM.getMaterial() + " " + strM.getBindingMark());
+            } else {
+                strList.add(el.getName() + " " + el.getMaterial());
+            }
         }
-        return strList;
+            return strList;
     }
-
 }

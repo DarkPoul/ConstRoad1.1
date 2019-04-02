@@ -23,6 +23,9 @@ public class Sand extends Layer implements Serializable {
         Сsn - коефіцієнт внутрішнього тертя шару піску, МПа
     thickness - товщина
     thicknessVariationCoeficient - коефіцієнт варіації товщини шару
+    estimatedWt - значення характеристик грунтів за вологістю
+    elasticModuleDeflection - модуль пружності при прогину
+    elasticModuleMovement - модуль пружності при зсуві
     * */
 
     private String name;
@@ -38,6 +41,9 @@ public class Sand extends Layer implements Serializable {
     private Double cost;
     private Double thickness;
     private Double thicknessVariationCoeficient;
+    private GroundWtParameters estimatedWt;
+    private Double elasticModuleDeflection;
+    private Double elasticModuleMovement;
 
     public Sand(String name, String material, String plasticNumber, String sanPartNumber, Double k3, Double kCfi,
                 Double kCeg, ArrayList<GroundWtParameters> wT, Double minThickness, Double maxThickness, Double cost) {
@@ -145,6 +151,28 @@ public class Sand extends Layer implements Serializable {
     @Override
     public void setThicknessVariationCoeficient(Double thicknessVariationCoeficient) {
         this.thicknessVariationCoeficient = thicknessVariationCoeficient;
+    }
+    public GroundWtParameters getEstimatedWt() {
+        return estimatedWt;
+    }
+    public void setEstimatedWt(GroundWtParameters estimatedWt) {
+        this.estimatedWt = estimatedWt;
+    }
+    @Override
+    public Double getElasticModuleDeflection() {
+        return elasticModuleDeflection;
+    }
+    @Override
+    public void setElasticModuleDeflection(Double elasticModuleDeflection) {
+        this.elasticModuleDeflection = elasticModuleDeflection;
+    }
+    @Override
+    public Double getElasticModuleMovement() {
+        return elasticModuleMovement;
+    }
+    @Override
+    public void setElasticModuleMovement(Double elasticModuleMovement) {
+        this.elasticModuleMovement = elasticModuleMovement;
     }
 
     @Override

@@ -1,8 +1,17 @@
 package com.ntu.api.domain.listCreate.Objects.Layers;
 
 import com.ntu.api.domain.listCreate.Objects.Element;
-
+//*клас описує шар дорожнього одягу в загальному вигляді
 public class Layer extends Element {
+//    name - ім'я
+//    material - матеріал
+//    minThickness - мінімальна товщина
+//    maxThickness - максимальна товщина
+//    cost - ціна
+//    thickness -товщина
+//    thicknessVariationCoeficient - коефіцієнт варіації товщини
+//    elasticModuleDeflection - модуль пружності при прогину
+//    elasticModuleMovement - модуль пружності при зсуві
     String name;
     String material;
     Double minThickness;
@@ -10,6 +19,8 @@ public class Layer extends Element {
     Double cost;
     Double thickness;
     Double thicknessVariationCoeficient;
+    Double elasticModuleDeflection;
+    Double elasticModuleMovement;
 
     public Layer() {
     }
@@ -56,5 +67,17 @@ public class Layer extends Element {
     }
     public void setThicknessVariationCoeficient(Double thicknessVariationCoeficient) {
         this.thicknessVariationCoeficient = thicknessVariationCoeficient;
+    }
+    public Double getElasticModuleDeflection() {
+        return elasticModuleDeflection;
+    }
+    public void setElasticModuleDeflection(Double elasticModuleDeflection) {
+        this.elasticModuleDeflection = elasticModuleDeflection;
+    }
+    public Double getElasticModuleMovement() {
+        return elasticModuleMovement;
+    }
+    public void setElasticModuleMovement(Double elasticModuleMovement) {
+        this.elasticModuleMovement = elasticModuleMovement;
     }
 }

@@ -102,7 +102,7 @@ public class AddLayerController {
                 try {
                     Layer temp = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
                             getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex());
-                    temp.setThickness(Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem()));
+                    temp.setThickness(Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem())*0.01);
                     if (layerType.getSelectionModel().getSelectedIndex() == 0) {
                         temp.setThicknessVariationCoeficient(2.84 / (10.2 + temp.getThickness()));
                         Bituminous tempBitum = (Bituminous) temp;
@@ -120,15 +120,15 @@ public class AddLayerController {
                             UnstrengthenedMaterial tempUnstrengthenedMaterial = (UnstrengthenedMaterial)temp;
                             tempUnstrengthenedMaterial.setElasticModuleDeflection((double)tempUnstrengthenedMaterial.getElasticityModul());
                             tempUnstrengthenedMaterial.setElasticModuleMovement((double)tempUnstrengthenedMaterial.getElasticityModul());
-                            roadConstraction.getUnstrengthenedMaterialsCover().add((UnstrengthenedMaterial) temp);
+                            roadConstraction.getUnstrengthenedMaterialsCover().add((tempUnstrengthenedMaterial));
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 3) {
                             UnstrengthenedMaterial tempUnstrengthenedMaterial = (UnstrengthenedMaterial)temp;
                             tempUnstrengthenedMaterial.setElasticModuleDeflection((double)tempUnstrengthenedMaterial.getElasticityModul());
                             tempUnstrengthenedMaterial.setElasticModuleMovement((double)tempUnstrengthenedMaterial.getElasticityModul());
-                            roadConstraction.getUnstrengthenedMaterialsBase().add((UnstrengthenedMaterial) temp);
+                            roadConstraction.getUnstrengthenedMaterialsBase().add(tempUnstrengthenedMaterial);
                         } else if (layerType.getSelectionModel().getSelectedIndex() == 4) {
                             Sand tempSand = (Sand)temp;
-                            roadConstraction.getSands().add((Sand) temp);
+                            roadConstraction.getSands().add(tempSand);
                         }
                     }
                     roadConstraction.layers();

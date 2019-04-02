@@ -11,8 +11,8 @@ public class Bituminous extends Layer implements Serializable {
     name - код асвальтобетону
     material - матеріал асвальтобетону
     bindingMark - марка в'яжучого
-    elasticityModul - модуль пружності Е, МПа
-    variationCoeficientCE - крефіцієнт варіації CE
+    elasticityModulTension- модуль пружності при згині Е, МПа
+    variationCoeficientCE - кoефіцієнт варіації CE
     rLab - гранична міцність на розтяг при згині Rlab, МПа
     variationCoeficientCR - коефіцієнт варіації CR
     m - показник втоми
@@ -23,12 +23,14 @@ public class Bituminous extends Layer implements Serializable {
     staticElasticModuls - модуль пружності при статичній дії навантаження
     thickness - товщина
     thicknessVariationCoeficient - коефіцієнт варіації товщини шару
+    elasticModuleDeflection - модуль пружності при прогину
+    elasticModuleMovement - модуль пружності при зсуві
     * */
 
     private String name;
     private String material;
     private String bindingMark;
-    private Integer elasticityModul;
+    private Double elasticityModulTension;
     private Double variationCoeficientCE;
     private Double rLab;
     private Double variationCoeficientCR;
@@ -43,8 +45,11 @@ public class Bituminous extends Layer implements Serializable {
     private Double cost;
     private Double thickness;
     private Double thicknessVariationCoeficient;
+    private Double elasticModuleDeflection;
+    private Double elasticModuleMovement;
 
-    public Bituminous(String name, String material, String bindingMark, Integer elasticityModul,
+
+    public Bituminous(String name, String material, String bindingMark, Double elasticityModulTension,
                       Double variationCoeficientCE, Double rLab, Double variationCoeficientCR, Double m,
                       Double koeficientKpr, Double kM, Double kT, ArrayList<ElasticModul> shortElasticModuls,
                       ArrayList<ElasticModul> staticElasticModuls, Double minThickness, Double maxThickness,
@@ -52,7 +57,7 @@ public class Bituminous extends Layer implements Serializable {
         this.name = name;
         this.material = material;
         this.bindingMark = bindingMark;
-        this.elasticityModul = elasticityModul;
+        this.elasticityModulTension = elasticityModulTension;
         this.variationCoeficientCE = variationCoeficientCE;
         this.rLab = rLab;
         this.variationCoeficientCR = variationCoeficientCR;
@@ -89,11 +94,11 @@ public class Bituminous extends Layer implements Serializable {
     public void setBindingMark(String bindingMark) {
         this.bindingMark = bindingMark;
     }
-    public Integer getElasticityModul() {
-        return elasticityModul;
+    public Double getElasticityModulTension() {
+        return elasticityModulTension;
     }
-    public void setElasticityModul(Integer elasticityModul) {
-        this.elasticityModul = elasticityModul;
+    public void setElasticityModulTension(Double elasticityModulTension) {
+        this.elasticityModulTension = elasticityModulTension;
     }
     public Double getVariationCoeficientCE() {
         return variationCoeficientCE;
@@ -149,6 +154,23 @@ public class Bituminous extends Layer implements Serializable {
     public void setStaticElasticModuls(ArrayList<ElasticModul> staticElasticModuls) {
         this.staticElasticModuls = staticElasticModuls;
     }
+
+    @Override
+    public Double getThickness() {
+        return thickness;
+    }
+    @Override
+    public void setThickness(Double thickness) {
+        this.thickness = thickness;
+    }
+    @Override
+    public Double getThicknessVariationCoeficient() {
+        return thicknessVariationCoeficient;
+    }
+    @Override
+    public void setThicknessVariationCoeficient(Double thicknessVariationCoeficient) {
+        this.thicknessVariationCoeficient = thicknessVariationCoeficient;
+    }
     @Override
     public Double getMinThickness() {
         return minThickness;
@@ -173,6 +195,22 @@ public class Bituminous extends Layer implements Serializable {
     public void setCost(Double cost) {
         this.cost = cost;
     }
+    @Override
+    public Double getElasticModuleDeflection() {
+        return elasticModuleDeflection;
+    }
+    @Override
+    public void setElasticModuleDeflection(Double elasticModuleDeflection) {
+        this.elasticModuleDeflection = elasticModuleDeflection;
+    }
+    @Override
+    public Double getElasticModuleMovement() {
+        return elasticModuleMovement;
+    }
+    @Override
+    public void setElasticModuleMovement(Double elasticModuleMovement) {
+        this.elasticModuleMovement = elasticModuleMovement;
+    }
 
     @Override
     public String toString() {
@@ -180,7 +218,7 @@ public class Bituminous extends Layer implements Serializable {
         sb.append("name='").append(name).append('\'');
         sb.append(", material='").append(material).append('\'');
         sb.append(", bindingMark='").append(bindingMark).append('\'');
-        sb.append(", elasticityModul=").append(elasticityModul);
+        sb.append(", elasticityModul=").append(elasticityModulTension);
         sb.append(", variationCoeficientCE=").append(variationCoeficientCE);
         sb.append(", rLab=").append(rLab);
         sb.append(", variationCoeficientCR=").append(variationCoeficientCR);

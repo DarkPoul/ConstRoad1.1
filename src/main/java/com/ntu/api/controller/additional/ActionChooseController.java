@@ -10,16 +10,28 @@ public class ActionChooseController {
     @FXML AnchorPane actionChoosePane;
     @FXML private void initialize(){
         RoadConstractionModel.preCalculation();
+        RoadConstractionModel.minElasticModuleChoose();
 
     }
 
     @FXML private void analysisOnClick(){
+        RoadConstractionModel.bendingTensionCalculation();
+        RoadConstractionModel.bendingTensionReliabilityCalculation();
+        System.out.println(RoadConstractionModel.getElasticTensionCoefficient());
+        RoadConstractionModel.movementSubGradeCalculation();
+        RoadConstractionModel.movementSubGradeReliabilityCalculation();
+        System.out.println(RoadConstractionModel.getMovementSubGradeCoefficient());
+        RoadConstractionModel.movementInviscidLayerCalculation();
+        RoadConstractionModel.movementInviscidLayerReliabilityCalculation();
+        System.out.println(RoadConstractionModel.getMovementInviscidLayerCoefficient());
         if(RoadConstractionModel.getRoadConstraction().getDesigionLoad().getName().equals("A1")){
             Message.errorCatch(actionChoosePane,"Попередження", "Для розрахункового навантаження А1 " +
                     "розрахунок конструкції нежорсткого одягу за критерієм загального молудя пружності не виконується");
         }
         else {
-            System.out.println(RoadConstractionModel.elasticDeflectionCalculation()); }
+            RoadConstractionModel.elasticDeflectionCalculation();
+            RoadConstractionModel.elasticDeflectionReliabilityCalculation();
+            System.out.println(RoadConstractionModel.getElasticDeflectionCoefficient()); }
 
     }
 

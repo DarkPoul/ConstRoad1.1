@@ -15,6 +15,7 @@ public class ConstRoadApp extends Application {
         primaryStage.setTitle("Constant Road 1.2.5");
         primaryStage.setResizable(false);
         Parent main = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/main.fxml"));
+
         primaryStage.setScene(new Scene(main));
         primaryStage.show();
     }

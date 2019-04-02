@@ -8,12 +8,16 @@ public class StrengthenedMaterial extends Layer implements Serializable {
     name - код
     material - матеріал
     bindingMark - марка в'яжучого
-    elasticityModulBase - модуль пружності Е, МПа для основ
-    elasticityModulShar - модуль пружності Е, МПа для покриттів
+    elasticityModul - модуль пружності Е, МПа
     variationCoeficientCE - крефіцієнт варіації CE
     rLab - гранична міцність на розтяг при згині Rlab, МПа
+    minThickness - мінімальна товщина;
+    maxThickness - максимальна товщина
+    cost - вартість
     thickness - товщина
     thicknessVariationCoeficient - коефіцієнт варіації товщини шару
+    elasticModuleDeflection - модуль пружності при прогину
+    elasticModuleMovement - модуль пружності при зсуві
     * */
 
     private String name;
@@ -27,6 +31,8 @@ public class StrengthenedMaterial extends Layer implements Serializable {
     private Double cost;
     private Double thickness;
     private Double thicknessVariationCoeficient;
+    private Double elasticModuleDeflection;
+    private Double elasticModuleMovement;
 
     public StrengthenedMaterial(String name, String material, String bindingMark, Integer elasticityModul,
                                 Double variationCoeficientCE, Double rLab, Double minThickness, Double maxThickness,
@@ -121,6 +127,22 @@ public class StrengthenedMaterial extends Layer implements Serializable {
     @Override
     public void setThicknessVariationCoeficient(Double thicknessVariationCoeficient) {
         this.thicknessVariationCoeficient = thicknessVariationCoeficient;
+    }
+    @Override
+    public Double getElasticModuleDeflection() {
+        return elasticModuleDeflection;
+    }
+    @Override
+    public void setElasticModuleDeflection(Double elasticModuleDeflection) {
+        this.elasticModuleDeflection = elasticModuleDeflection;
+    }
+    @Override
+    public Double getElasticModuleMovement() {
+        return elasticModuleMovement;
+    }
+    @Override
+    public void setElasticModuleMovement(Double elasticModuleMovement) {
+        this.elasticModuleMovement = elasticModuleMovement;
     }
 
     @Override
