@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class GroundType extends Element implements Serializable {
 
-    /* SoilType - категорія грунта
-    SoilType описує вид грунту:
+    /* GroundType - категорія грунта
+    GroundType описує вид грунту:
     name - його шифр,
     typicalSoil - типовий грунт,
     humidity_1_2 - вологість для 1-2 категорі] доріг

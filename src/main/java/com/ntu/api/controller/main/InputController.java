@@ -1,5 +1,6 @@
 package com.ntu.api.controller.main;
 
+import com.ntu.api.controller.additional.ActionChooseController;
 import com.ntu.api.domain.LayerT;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
@@ -38,6 +39,7 @@ public class InputController {
     @FXML private ComboBox<String> groundCorrectionBox;
     @FXML private TextField passageNumber;
     @FXML private TextField operationTerm;
+    @FXML private Button okButton;
 
     @FXML private TableView<LayerT> layerTable;
     @FXML private TableColumn<LayerT, Integer> clnId;
@@ -66,6 +68,7 @@ public class InputController {
     public ObservableList<LayerT> getLayers() {
         return layers;
     }
+    private static boolean editBool=false;
 
     public static RoadConstraction roadConstraction;
 
@@ -75,8 +78,12 @@ public class InputController {
     public static void setRoadConstraction(RoadConstraction roadConstraction) {
         InputController.roadConstraction = roadConstraction;
     }
+    public static void setEditBool(boolean editBool) {
+        InputController.editBool = editBool;
+    }
 
     @FXML public void initialize(){
+        okButton.textProperty().set("Додати нову конструкцію дорожнього одягу");
         Lists.listReader();
         rbczList = FXCollections.observableArrayList();
         roadList = FXCollections.observableArrayList();
@@ -126,13 +133,26 @@ public class InputController {
         layerTable.setItems(layers);
 
         roadConstraction = new RoadConstraction();
+        if(editBool){
+            okButton.textProperty().set("Зберегти конструкцію дорожнього одягу");
+            roadConstraction = RoadConstractionModel.getRoadConstraction();
+            rbczBox.promptTextProperty().set(roadConstraction.getRbcz().getName());
+            roadBox.promptTextProperty().set(roadConstraction.getRoad().getName());
+            sollsBox.promptTextProperty().set(roadConstraction.getSoils().getName());
+            groundTypeBox.promptTextProperty().set(roadConstraction.getGroundType().getName());
+            groundBox.promptTextProperty().set(roadConstraction.getGround().getName());
+            roadTypeBox.promptTextProperty().set(roadConstraction.getRoadType().getName());
+            dessigionLoadBox.promptTextProperty().set(roadConstraction.getDesigionLoad().getName());
+            roadLinesBox.promptTextProperty().set(roadConstraction.getRoadLines().getName());
+            groundCorrectionBox.promptTextProperty().set(roadConstraction.getGroundCorection().getName());
+            layers.clear();
+            layers.setAll(roadConstraction.layerTableList());
+            passageNumber.setText(String.valueOf(roadConstraction.getPassageNumber()));
+            operationTerm.setText(String.valueOf(roadConstraction.getOperationTime()));
+        }
     }
 
-    public AnchorPane getInputPane() {
-        return inputPane;
-    }
-
-    public void rbczOnView(){
+    @FXML public void rbczOnView(){
         Stage rbcz = new Stage();
         rbcz.setTitle("Дорожньо-кліматична карта України");
         rbcz.setResizable(false);
@@ -156,7 +176,7 @@ public class InputController {
         }
     }
 
-    public void sollsOnView(){
+    @FXML  public void sollsOnView(){
         Stage solls = new Stage();
         solls.setTitle("Тип земляного полотна");
         solls.setResizable(false);
@@ -180,7 +200,7 @@ public class InputController {
         }
     }
 
-    public void groundTypeOnView(){
+    @FXML  public void groundTypeOnView(){
         Stage groundType = new Stage();
         groundType.setTitle("Карта дорожнього районування України за грунтово-геологічними умовами");
         groundType.setResizable(false);
@@ -206,7 +226,7 @@ public class InputController {
         }
     }
 
-    public void addRoadLayer(){
+    @FXML public void addRoadLayer(){
         Stage addLayer = new Stage();
         addLayer.setTitle("Додавання шару конструкції дорожнього одягу");
         addLayer.setResizable(false);
@@ -230,7 +250,7 @@ public class InputController {
 
     }
 
-    public void correctRoadLayer(){
+    @FXML public void correctRoadLayer(){
         Stage correctLayer = new Stage();
         correctLayer.setTitle("Редагування шару конструкції дорожнього одягу");
         correctLayer.setResizable(false);
@@ -254,7 +274,7 @@ public class InputController {
         }
     }
 
-    public void deleteRoadLayer(){
+    @FXML public void deleteRoadLayer(){
         Stage deleteLayer = new Stage();
         deleteLayer.setTitle("Видалення шару конструкції дорожнього одягу");
         deleteLayer.setResizable(false);
@@ -279,27 +299,31 @@ public class InputController {
         }
     }
 
-    public void passageCalculation(){
+    @FXML public void passageCalculation(){
 
     }
 
-    public void operationTimeOnClick(){
+    @FXML public void operationTimeOnClick(){
 
     }
 
-    public void addOnClick(){
+    @FXML public void addOnClick(){
         try {
             roadConstraction.setOperationTime(Double.parseDouble(operationTerm.getText()));
             roadConstraction.setPassageNumber(Double.parseDouble(passageNumber.getText()));
             roadConstraction.setTotalLayersThickness(RoadConstractionModel.totalLayersThickness(roadConstraction));
             RoadConstractionModel.setRoadConstraction(roadConstraction);
+            RoadConstractionModel.preCalculation();
+            RoadConstractionModel.minElasticModuleChoose();
 
             FileChooser chooser = new FileChooser();
             File fileName = chooser.showSaveDialog(inputPane.getScene().getWindow());
+            ActionChooseController.setDirectory(fileName.getParentFile());
+            ActionChooseController.setFile(fileName);
 
             try(FileOutputStream fos = new FileOutputStream(fileName)){
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(roadConstraction);
+                oos.writeObject(RoadConstractionModel.getRoadConstraction());
                 oos.flush();
             }
             catch (FileNotFoundException e) {e.printStackTrace();}
@@ -312,18 +336,18 @@ public class InputController {
         }
     }
 
-    public void cancelOnClick(){
+    @FXML public void cancelOnClick(){
         Stage dlg = (Stage)(inputPane.getScene().getWindow());
         dlg.close();
     }
 
 
-    public void rsczOnClick(){
+    @FXML public void rsczOnClick(){
         try{
         roadConstraction.setRbcz(Lists.getRbczList().get(rbczBox.getSelectionModel().getSelectedIndex()));}
         catch (RuntimeException e){}
     }
-    public void roadOnClick(){
+    @FXML public void roadOnClick(){
         ArrayList<Integer> newRoadLinesList = new ArrayList<>();
         boxClear(roadTypeBox);
         boxClear(dessigionLoadBox);
@@ -370,14 +394,14 @@ public class InputController {
         dessigionLoadBox.getItems().setAll(newLoadTypeList);
     }
 
-    public void sollsOnClick(){
+    @FXML public void sollsOnClick(){
         try {
             roadConstraction.setSoils(Lists.getSoilList().get(sollsBox.getSelectionModel().getSelectedIndex()));
         }
         catch (RuntimeException e){}
     }
 
-    public void groundTypeOnClick(){
+    @FXML public void groundTypeOnClick(){
         try {
             boxClear(groundBox);
             roadConstraction.setGroundType(roadConstraction.getSoils().getSoilTypes().get(groundTypeBox.getSelectionModel().getSelectedIndex()));
@@ -386,13 +410,13 @@ public class InputController {
         catch (RuntimeException e){}
     }
 
-    public void groundOnClick(){
+    @FXML public void groundOnClick(){
         try{
         roadConstraction.setGround(grounds.get(groundBox.getSelectionModel().getSelectedIndex()));
         }
     catch (RuntimeException e){}}
 
-    public void roadTypeOnClick(){
+    @FXML public void roadTypeOnClick(){
         try{
             listNameClear(newLoadTypeList);
             listObjectClear(desigionLoads);
@@ -410,21 +434,21 @@ public class InputController {
         catch (RuntimeException e){}
     }
 
-    public void dessigionLoadOnClick(){
+    @FXML public void dessigionLoadOnClick(){
         try {
             roadConstraction.setDesigionLoad(desigionLoads.get(dessigionLoadBox.getSelectionModel().getSelectedIndex()));
         }
         catch (RuntimeException e){}
     }
 
-    public void roadLinesOnClick(){
+    @FXML public void roadLinesOnClick(){
         try{
             roadConstraction.setRoadLines(roadConstraction.checkRoadLines(roadConstraction.getRoad().getLanesNumber()).get(roadLinesBox.getSelectionModel().getSelectedIndex()));
         }
         catch (RuntimeException e){}
     }
 
-    public void groundCorrectionOnClick(){
+    @FXML public void groundCorrectionOnClick(){
         try{
             roadConstraction.setGroundCorection(Lists.getGroundCorrection().get(groundCorrectionBox.getSelectionModel().getSelectedIndex()));
         }
@@ -433,7 +457,7 @@ public class InputController {
         }
     }
 
-    private void groundCheck(){
+    @FXML  private void groundCheck(){
         String[] groundsName = roadConstraction.getGroundType().getTypicalSoil().split(", ");
         ArrayList<String > groundName = new ArrayList<>();
         for(Ground ground: Lists.getGrounds()){

@@ -1,9 +1,10 @@
 package com.ntu.api.model;
 
 import com.ntu.api.domain.RoadConstraction;
-import com.ntu.api.domain.listCreate.Objects.Element;
 import com.ntu.api.domain.listCreate.Objects.GroundWtParameters;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
+import org.apache.commons.math3.special.Erf;
+
 
 import java.util.ArrayList;
 
@@ -38,6 +39,10 @@ public class RoadConstractionModel {
     *  criticalTension - граничне напруження зсуву в грунті;
     *  ownTension - напруження зсуву в грунті від власної ваги дорожнього одягу;
     *  activeTension - активне навантаження зсуву грунту від тимчасового навантаження;
+    *  tension - запас міцності за критерієм опору шарів з монолітних матеріалів розтягу при згині у відсотках від необхідного
+    *  deflection - запас міцності за критерієм пружного прогину(загального модуля пружності) у відсотках від необхідного
+    *  subGradeMovement - запас міцності за критерієм зсуву у грунті земляного полотна у відсотках від необхідного
+    *  inviscLayerMovement - запас міцності за критерієм зсуву у шарі нев'язкого середовища у відсотках від необхідного
     * */
     private static RoadConstraction roadConstraction;
     private static final Integer staticLoadDuration = 600;
@@ -55,6 +60,10 @@ public class RoadConstractionModel {
     private static Double elasticTensionCoefficient;
     private static Double movementSubGradeCoefficient;
     private static ArrayList<Double> movementInviscidLayerCoefficient;
+    private static Double bendingTensionReliability;
+    private static Double elasticDeflectionReliability;
+    private static Double movementSubGradeReliability;
+    private static ArrayList<Double> movementInviscidLayerReliability;
     private static Double criticalTension;
     private static Double ownTension;
     private static Double activeTension;
@@ -62,6 +71,11 @@ public class RoadConstractionModel {
     private static double k2;
     private static double k3;
     private static double k4;
+    private static Double roadCost;
+    private static Double tension;
+    private static Double deflection;
+    private static Double subGradeMovement;
+    private static ArrayList<Double> inviscLayerMovement;
 
     public static RoadConstraction getRoadConstraction() {
         return roadConstraction;
@@ -132,6 +146,49 @@ public class RoadConstractionModel {
     public static void setMovementInviscidLayerCoefficient(ArrayList<Double> movementInviscidLayerCoefficient) {
         RoadConstractionModel.movementInviscidLayerCoefficient = movementInviscidLayerCoefficient;
     }
+    public static Double getBendingTensionReliability() {
+        return bendingTensionReliability;
+    }
+    public static void setBendingTensionReliability(Double bendingTensionReliability) {
+        RoadConstractionModel.bendingTensionReliability = bendingTensionReliability;
+    }
+    public static Double getElasticDeflectionReliability() {
+        return elasticDeflectionReliability;
+    }
+    public static void setElasticDeflectionReliability(Double elasticDeflectionReliability) {
+        RoadConstractionModel.elasticDeflectionReliability = elasticDeflectionReliability;
+    }
+    public static Double getMovementSubGradeReliability() {
+        return movementSubGradeReliability;
+    }
+    public static void setMovementSubGradeReliability(Double movementSubGradeReliability) {
+        RoadConstractionModel.movementSubGradeReliability = movementSubGradeReliability;
+    }
+    public static ArrayList<Double> getMovementInviscidLayerReliability() {
+        return movementInviscidLayerReliability;
+    }
+    public static void setMovementInviscidLayerReliability(ArrayList<Double> movementInviscidLayerReliability) {
+        RoadConstractionModel.movementInviscidLayerReliability = movementInviscidLayerReliability;
+    }
+    public static Double getRoadCost() {
+        return roadCost;
+    }
+    public static void setRoadCost(Double roadCost) {
+        RoadConstractionModel.roadCost = roadCost;
+    }
+
+    public static Double getTension() {
+        return tension;
+    }
+    public static Double getDeflection() {
+        return deflection;
+    }
+    public static Double getSubGradeMovement() {
+        return subGradeMovement;
+    }
+    public static ArrayList<Double> getInviscLayerMovement() {
+        return inviscLayerMovement;
+    }
 
     //    метод розрахунку коефіцієнту запасу міцності за критерієм опору шарів з монолітних матеріалів розтягу при згині
     public static Double bendingTensionCalculation(){
@@ -154,6 +211,7 @@ public class RoadConstractionModel {
         Double gR = 1.28*E1E2*hD*((1-(0.637*Math.atan(cr)))*Math.pow(Math.atan((1.0/cr)),2.0))*
                 roadConstraction.getDesigionLoad().getPreassureWeel()*kb;
         elasticTensionCoefficient = rZg/gR;
+        tension = (int) ((elasticTensionCoefficient- roadConstraction.getRoad().getrBend()) / RoadConstractionModel.getRoadConstraction().getRoad().getrBend() * 10000) / 100.0;
         return elasticTensionCoefficient;
     }
 
@@ -166,6 +224,7 @@ public class RoadConstractionModel {
         }
         elasticModule = calculatedElasticModule;
         elasticDeflectionCoefficient = elasticModule/neededElasticModule;
+        deflection = (int)((elasticDeflectionCoefficient - roadConstraction.getRoad().getrDefl())/RoadConstractionModel.getRoadConstraction().getRoad().getrDefl()*10000)/100.0;
         return elasticDeflectionCoefficient;
     }
 
@@ -178,6 +237,7 @@ public class RoadConstractionModel {
                 (Math.pow(roadConstraction.getTotalLayersThickness()/calculatedWeelImprintDiameter,2.0)*
                  Math.pow(tensionMidleElasticModule()/roadConstraction.getEstimatedGroundWt().geteGr(),2.0/3.0)*57/25+4);
         movementSubGradeCoefficient = criticalTension/(ownTension+activeTension);
+        subGradeMovement = (int)((movementSubGradeCoefficient-roadConstraction.getRoad().getrOffset())/RoadConstractionModel.getRoadConstraction().getRoad().getrOffset()*10000)/100.0;
         return movementSubGradeCoefficient;
     }
 //    метод розрахунку коефіцієнту запасу міцності за критерієм зсуву у шарі нев'язкого середовища
@@ -188,6 +248,7 @@ public class RoadConstractionModel {
             roadSands.add(sand);
         }
         movementInviscidLayerCoefficient = new ArrayList<>();
+        inviscLayerMovement = new ArrayList<>();
         while (roadSands.size()>0){
             Sand tempSand = roadSands.get(roadSands.size()-1);
             roadSands.remove(roadSands.size()-1);
@@ -199,48 +260,41 @@ public class RoadConstractionModel {
                     Math.exp(-tempSand.getEstimatedWt().getFi()/33)/(Math.pow(layersThickness/calculatedWeelImprintDiameter,2.0)*
                     Math.pow(tensionMidleElasticModule(roadSands, layersThickness)/tempSand.getEstimatedWt().geteGr(),2.0/3.0)*57/25+4);
             movementInviscidLayerCoefficient.add(0,criticalTension/(ownTension+activeTension));
+            inviscLayerMovement.add(0,(int)((criticalTension/(ownTension+activeTension)-roadConstraction.getRoad().getrOffset())/RoadConstractionModel.getRoadConstraction().getRoad().getrOffset()*10000)/100.0);
         }
         return movementInviscidLayerCoefficient;
     }
     //    метод розрахунку надійності за критерієм опору шарів з монолітних матеріалів розтягу при згині
     public static Double bendingTensionReliabilityCalculation(){
-//        ArrayList<Bituminous> calculatedBitumsList = new ArrayList<>();
-//        for (Bituminous temp: roadConstraction.getBituminous()){
-//            calculatedBitumsList.add(0,temp);
-//        }
-//        double calculatedElasticModule = roadConstraction.getEstimatedGroundWt().geteGr();
-//        for (Bituminous temp: calculatedBitumsList){
-//            Double hEkvD = 2*temp.getThickness()*Math.pow(temp.getElasticityModulTension()/(6*calculatedElasticModule),1.0/3.0)/calculatedWeelImprintDiameter;
-//            calculatedElasticModule = (1.05-(0.1*temp.getThickness()/calculatedWeelImprintDiameter*
-//                    (1-Math.pow(calculatedElasticModule/temp.getElasticityModulTension(),1.0/3.0))))*temp.getElasticityModulTension()
-//                    /(0.71*Math.pow(calculatedElasticModule/temp.getElasticityModulTension(),1.0/3.0)*Math.atan(1.35*hEkvD)
-//                    +(temp.getElasticityModulTension()/calculatedElasticModule*2/Math.PI*Math.atan(1/hEkvD)));
-//        }
-
-
-        return 0.0 ;
+        bendingTensionReliability = reliabilityCalculation(elasticTensionCoefficient,roadConstraction.getRoad().getcS(),roadConstraction.getRoad().getCrBend());
+        return bendingTensionReliability;
     }
 
     //    метод розрахунку надійності за критерієм пружного прогину(загального модуля пружності)
     public static Double elasticDeflectionReliabilityCalculation(){
-
-        return 0.0 ;
+        elasticDeflectionReliability = reliabilityCalculation(elasticDeflectionCoefficient, roadConstraction.getRoad().getcR(),roadConstraction.getRoad().getCrDefl()) ;
+        return elasticDeflectionReliability;
     }
 
     //    метод розрахунку надійності за критерієм зсуву у грунті земляного полотна
     public static Double movementSubGradeReliabilityCalculation(){
-
-        return 0.0 ;
+        movementSubGradeReliability = reliabilityCalculation(movementSubGradeCoefficient,roadConstraction.getRoad().getcT(),roadConstraction.getRoad().getCrOffset()) ;
+        return movementSubGradeReliability;
     }
     //    метод розрахунку надійності за критерієм зсуву у шарі нев'язкого середовища
-    public static Double movementInviscidLayerReliabilityCalculation(){
-
-        return 0.0 ;
+    public static ArrayList<Double> movementInviscidLayerReliabilityCalculation(){
+        movementInviscidLayerReliability = new ArrayList<>();
+        for(Double coefficient: movementInviscidLayerCoefficient){
+            movementInviscidLayerReliability.add(reliabilityCalculation(coefficient,roadConstraction.getRoad().getcT(), roadConstraction.getRoad().getCrOffset()));
+        }
+        return movementInviscidLayerReliability;
     }
 
-    // метод розрахунку загального модуля пружності Езаг
-    public static Double elasticModuleCalculation(){
-        return 0.0 ;
+    private static Double reliabilityCalculation(Double koeficient, Double koeficientC, Double koeficientCr){
+        Double reliabilityParameter =(koeficient-1.0)/
+                Math.sqrt(Math.pow(koeficientCr,2)*Math.pow(koeficient,2)+Math.pow(koeficientC,2));
+        Double reliabilityKoeficient = 0.5*Erf.erf(reliabilityParameter/Math.sqrt(2.0))+0.5;
+        return reliabilityKoeficient;
     }
 
     //     метод визначення загальної товщини шарів дорожного покриття
@@ -253,24 +307,6 @@ public class RoadConstractionModel {
         }
         return layersThickness;
     }
-
-//    метод визначення загальної товщини в'язких шарів дорожнього покриття (без шарів піску + з шарами піску)
-//    public static ArrayList<Double> layersThicknessWithoutSand(RoadConstraction roadConstraction){
-//        ArrayList<Double> layerThicknessWithoutSands = new ArrayList<>();
-//        Double tempLAyerThickness=0.0;
-//        for(RoadLayers el: roadConstraction.getRoadLayers()){
-//            if(!el.getName().equals("Шар нев'язкого середовища") && el.getLayers().size()>0){
-//                for (Layer layer:el.getLayers()){
-//                    tempLAyerThickness += layer.getThickness()*0.01;
-//                }
-//            }
-//        }
-//        layerThicknessWithoutSands.add(tempLAyerThickness);
-//        for (Sand sand: roadConstraction.getSands()){
-//            layerThicknessWithoutSands.add(layerThicknessWithoutSands.get(layerThicknessWithoutSands.size()-1)+sand.getThickness()*0.01);
-//        }
-//        return layerThicknessWithoutSands;
-//    }
 
 //    метод визначення розрахункової вологості грунту
     public static void estimatedGroundMoisture(){
@@ -422,23 +458,87 @@ public class RoadConstractionModel {
         }
         return tensionElasticModule / layerThickness;
     }
+//    метод розрахунку вартості дорожнього покриття
+    public static Double roadCost(){
+        roadCost = 0.0;
+        for(RoadLayers roadLar: roadConstraction.getRoadLayers()){
+            for (Layer layer : roadLar.getLayers()) {
+                roadCost += layer.getCost()*layer.getThickness();
+            }
+        }
+        return roadCost;
+    }
+
+//      метод формування списку, який включає список можливих товщин шарів дорожнього одягу
+    private static ArrayList<ArrayList<Double>> layersThincknessArray(){
+        ArrayList<ArrayList<Double>> layersThinkArray = new ArrayList<>();
+        for(Layer layer: roadConstraction.getTotalLayerList()){
+            ArrayList<Double> arrayThick = new ArrayList<>();
+            Double start = layer.getMinThickness();
+            Double finish = layer.getMaxThickness();
+            while (start<=finish){
+                arrayThick.add(start);
+                start=start+1;
+            }
+            layersThinkArray.add(arrayThick);
+        }
+        return layersThinkArray;
+    }
+
+//     метод визначення списку можливих комбінацій товщин шарів дорожнього одягу для перебору варіантів
+    public static ArrayList<ArrayList<Double>> layerThinckVariation(){
+        ArrayList<ArrayList<Double>> input = layersThincknessArray();
+        ArrayList<ArrayList<Double>> result = new ArrayList<>();
+        for(ArrayList<Double> in:input){
+            if(result.size()==0){
+                for(Double el: in) {
+                    ArrayList<Double> temp = new ArrayList<>();
+                    temp.add(el);
+                    result.add(temp);
+                }
+            }
+            else{
+                ArrayList<ArrayList<Double>> newResult = new ArrayList<>();
+                for(ArrayList<Double> elements: result){
+                    for(Double koeficients: in){
+                        ArrayList<Double> temp = base(elements);
+                        temp.add(koeficients);
+                        newResult.add(temp);
+                    }
+                }
+                result = new ArrayList<>();
+                for(ArrayList<Double> results:newResult){
+                    result.add(results);
+                }
+            }
+            System.out.println(result.size());
+        }
+        System.out.println(result);
+        return result;
+    }
+
+    //    метод формування базового елемента для методу визначення можливих комбінацій товщин шарів дорожнього одягу
+    private static ArrayList<Double> base(ArrayList<Double>input){
+        ArrayList<Double> baseArrays = new ArrayList<>();
+        for(Double el: input){
+            baseArrays.add(el);
+        }
+        return baseArrays;
+    }
 
 
-
-
-//    метод для формування списку матеріалів з їх товщиною та модулями пружності для розрахунку загального модуля пружності при прогині
-//    private static ArrayList<LayerModele> DeflectionElasticModelesCalculating(ArrayList<Layer> layers){
-//        ArrayList<LayerModele> layerModeles = new ArrayList<>();
-//        for(Layer layer: layers){
-//            if(layer.getClass().equals(Bituminous.class)) {
-//                Bituminous tempBitum = (Bituminous) layer;
-//                layerModeles.set(0, new LayerModele(tempBitum.getName(), tempBitum.getThickness(), (double)tempBitum.getShortElasticModuls().get(0).getElasticModule());
-//            }
-//            else if (layer.)
-//
+//    public static void ios(File fileName){
+//        try(FileOutputStream os = new FileOutputStream(fileName); ObjectOutputStream oos = new ObjectOutputStream(os);
+//            FileInputStream is = new FileInputStream(fileName); ObjectInputStream ois = new ObjectInputStream(is))
+//        {
+//            oos.writeObject(user);
+//            User user = (User) ois.readObject();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
 //        }
-//
-//        return 0.0;
 //    }
-
 }

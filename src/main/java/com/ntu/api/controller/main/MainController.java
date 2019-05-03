@@ -1,6 +1,7 @@
 package com.ntu.api.controller.main;
 
 import com.ntu.api.controller.additional.AboutController;
+import com.ntu.api.controller.additional.ActionChooseController;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
 import com.ntu.api.model.RoadConstractionModel;
@@ -27,15 +28,15 @@ public class MainController {
         this.roadConstraction = roadConstraction;
     }
 
-    public void helpOnClick(){
+    @FXML public void helpOnClick(){
         helpAboutOpen("Help", "Help Error", false);
     }
 
-    public void aboutOnClick(){
+    @FXML public void aboutOnClick(){
         helpAboutOpen("About", "About Error", true);
     }
 
-    private void helpAboutOpen(String paneName, String errorMessage, boolean bool){
+    @FXML private void helpAboutOpen(String paneName, String errorMessage, boolean bool){
         Stage about = new Stage();
         about.setTitle(paneName);
         about.setResizable(false);
@@ -53,7 +54,8 @@ public class MainController {
         }
     }
 
-    public void newOnClick(){
+    @FXML public void newOnClick(){
+        InputController.setEditBool(false);
         Stage input = new Stage();
         input.setTitle("Введення нової конструкції дорожнього одягу");
         input.setResizable(false);
@@ -70,9 +72,11 @@ public class MainController {
         }
     }
 
-    public void openOnClick(){
+    @FXML public void openOnClick(){
         FileChooser fileChooser = new FileChooser();
         File fileName = fileChooser.showOpenDialog(main.getScene().getWindow());
+        ActionChooseController.setDirectory(fileName.getParentFile());
+        ActionChooseController.setFile(fileName);
 
         try(FileInputStream is = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(is)){
@@ -85,12 +89,12 @@ public class MainController {
         }
     }
 
-    public void closeOnClick(){
+    @FXML public void closeOnClick(){
         System.exit(0);
     }
 
 
-    public static void actionChooser(AnchorPane pane){
+    @FXML public static void actionChooser(AnchorPane pane){
         Stage actionChoose = new Stage();
         actionChoose.setTitle("Дії з конструкцією дорожнього одягу");
         actionChoose.setResizable(false);

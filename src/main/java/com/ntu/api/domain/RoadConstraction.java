@@ -15,7 +15,7 @@ public class RoadConstraction extends Element implements Serializable {
     * road - описує категорію дороги:
     * roadType - описує тип дорожнього одягу
     * desigionLoad - описує групу розрахункового навантаження
-    * soils -  описує вид грунту
+    * soils -  описує вид грунтів
     * groundType - описує вид грунту;
     * ground - описує різновид глинистих грунтів;
     * roadLines - описує коефіцієнти суг руху
@@ -53,7 +53,6 @@ public class RoadConstraction extends Element implements Serializable {
     private static Double neededElasticModule;
     private double totalLayersThickness;
     private int minElasticModule;
-
 
     private ArrayList<Bituminous> bituminous= new ArrayList<>();
     private ArrayList<StrengthenedMaterial> strengthenedMaterials= new ArrayList<>();
@@ -218,27 +217,50 @@ public class RoadConstraction extends Element implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("RoadConstraction{");
-        sb.append("rbcz=").append(rbcz);
-        sb.append(", road=").append(road);
-        sb.append(", roadType=").append(roadType);
-        sb.append(", desigionLoad=").append(desigionLoad);
-        sb.append(", soils=").append(soils);
-        sb.append(", groundType=").append(groundType);
-        sb.append(", ground=").append(ground);
-        sb.append(", roadLines=").append(roadLines);
-        sb.append(", groundCorection=").append(groundCorection);
-        sb.append(", humidity=").append(humidity);
-        sb.append(", correction=").append(correction);
-        sb.append(", operationTime=").append(operationTime);
-        sb.append(", passageNumber=").append(passageNumber);
-        sb.append(", bituminous=").append(bituminous);
-        sb.append(", strengthenedMaterials=").append(strengthenedMaterials);
-        sb.append(", unstrengthenedMaterialsCover=").append(unstrengthenedMaterialsCover);
-        sb.append(", unstrengthenedMaterialsBase=").append(unstrengthenedMaterialsBase);
-        sb.append(", sands=").append(sands);
-        sb.append(", roadLayers=").append(roadLayers);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("RoadConstraction\n");
+        sb.append("Дорожньо-кліматична зона України ").append(rbcz.getName()).append("\n");
+        sb.append("Категорія дороги ").append(road.getName()).append("\n");
+        sb.append("Тип дорожнього одягу ").append(roadType.getName()).append("\n");
+        sb.append("Група розрахункового навантаження ").append(desigionLoad.getName()).append("\n");
+        sb.append("Вид грунтів ").append(soils.getName()).append("\n");
+        sb.append("Вид грунту ").append(groundType.getName()).append("\n");
+        sb.append("Різновид глинистих грунтів ").append(ground.getName()).append("\n");
+        sb.append("Кількість суг руху ").append(roadLines.getName()).append("\n");
+        sb.append("Дренажна конструкція ").append(groundCorection.getName()).append("\n");
+        sb.append("Вологість грунту ").append(humidity).append("\n");
+        sb.append("Поправка на конструктивні особливості дренажної конструкції ").append(correction).append("\n");
+        sb.append("Строк експлуатації до капітального ремонту ").append(operationTime).append(" років \n");
+        sb.append("Сумарна кількість проїздів розрахункового навантаження за строк служби ").append(passageNumber).append("\n");
+        if(bituminous.size()>0) {
+            sb.append("Шари асфальтобетонів: \n");
+            for (Bituminous bituminous : bituminous) {
+                sb.append(bituminous.getName()).append("товщина " + bituminous.getThickness() + " \n");
+            }
+        }
+        if(strengthenedMaterials.size()>0) {
+            sb.append("Шари матеріалів і грунтів укрвплених в'яжучими речовинами: \n");
+            for (StrengthenedMaterial strengthenedMaterial : strengthenedMaterials) {
+                sb.append(strengthenedMaterial.getName()).append(" товщина " + strengthenedMaterial.getThickness() + " \n");
+            }
+        }
+        if(unstrengthenedMaterialsCover.size()>0) {
+            sb.append("Шари покриття з матеріалів і грунтів неукрвплених в'яжучими речовинами: \n");
+            for (UnstrengthenedMaterial unstrengthenedMaterial : unstrengthenedMaterialsCover) {
+                sb.append(unstrengthenedMaterial.getName()).append(" товщина " + unstrengthenedMaterial.getThickness() + " \n");
+            }
+        }
+        if(unstrengthenedMaterialsBase.size()>0) {
+            sb.append("Шари основи з матеріалів і грунтів неукрвплених в'яжучими речовинами: \n");
+            for (UnstrengthenedMaterial unstrengthenedMaterial : unstrengthenedMaterialsBase) {
+                sb.append(unstrengthenedMaterial.getName()).append(" товщина " + unstrengthenedMaterial.getThickness() + " \n");
+            }
+        }
+        if(sands.size()>0) {
+            sb.append("Шари піску: \n");
+            for (Sand sand : sands) {
+                sb.append(sand.getName()).append(" товщина " + sand.getThickness() + " \n");
+            }
+        }
         return sb.toString();
     }
 
@@ -352,20 +374,6 @@ public class RoadConstraction extends Element implements Serializable {
             }
         }
         return checkedRoadLines;
-    }
-
-//    метод формування списку шарів дорожнього одягу без шарів нев'язкого середовища
-//    метод використовується при розрахунку загального модуля пружності
-    public ArrayList<Layer> getLayerList(){
-        ArrayList<Layer> temp = new ArrayList<>();
-        for(RoadLayers roadLar: roadLayers){
-            if(!roadLar.getName().equals("Шар нев'язкого середовища")) {
-                for (Layer layer : roadLar.getLayers()) {
-                    temp.add(layer);
-                }
-            }
-        }
-        return temp;
     }
 
 //    метод формування повного списку шарів дорожнього одягу
