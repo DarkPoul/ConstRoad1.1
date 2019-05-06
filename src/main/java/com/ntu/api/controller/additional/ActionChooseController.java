@@ -20,55 +20,27 @@ import java.util.Calendar;
 public class ActionChooseController {
     @FXML AnchorPane actionChoosePane;
 
-    private static File directory;
-    private static File file;
-    private static boolean enumerated = false;
-
-    public static File getDirectory() {
-        return directory;
-    }
-    public static void setDirectory(File directory) {
-        ActionChooseController.directory = directory;
-    }
-    public static File getFile() {
-        return file;
-    }
-    public static void setFile(File file) {
-        ActionChooseController.file = file;
-    }
-
     @FXML private void initialize(){
         RoadConstractionModel.preCalculation();
     }
 
     @FXML private void analysisOnClick(){
-//        розрахунок на згин
-        if(RoadConstractionModel.getRoadConstraction().getBituminous().size()>0) {
-            RoadConstractionModel.bendingTensionCalculation();
-            RoadConstractionModel.bendingTensionReliabilityCalculation();
+        RoadConstractionModel.setEnumerated(false);
+        RoadConstractionModel.analisys(actionChoosePane);
+
+        Stage report = new Stage();
+        report.setTitle("Результати розрахунку конструкції дорожнього одягу");
+        report.setResizable(false);
+        AnchorPane reportPane;
+        try {
+            reportPane = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/additional/report.fxml"));
+            report.initOwner(actionChoosePane.getScene().getWindow());
+            report.initModality(Modality.WINDOW_MODAL);
+            report.setScene(new Scene(reportPane));
+            report.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-//        розрахунок на прогин
-        if(RoadConstractionModel.getRoadConstraction().getDesigionLoad().getName().equals("A1")){
-            Message.errorCatch(actionChoosePane,"Попередження", "Для розрахункового навантаження А1 " +
-                    "розрахунок конструкції нежорсткого одягу за критерієм загального модуля пружності не виконується");
-        }
-        else {
-            RoadConstractionModel.elasticDeflectionCalculation();
-            RoadConstractionModel.elasticDeflectionReliabilityCalculation();
-        }
-//        розрахунок по зсуву грунту земляного покриття
-        RoadConstractionModel.movementSubGradeCalculation();
-        RoadConstractionModel.movementSubGradeReliabilityCalculation();
-//        розрахунок по зсуву у нев'язких матеріалах
-        if(RoadConstractionModel.getRoadConstraction().getSands().size()>0) {
-            RoadConstractionModel.movementInviscidLayerCalculation();
-            RoadConstractionModel.movementInviscidLayerReliabilityCalculation();
-        }
-//      розрахунок ціни покриття
-        RoadConstractionModel.roadCost();
-        Report report = new Report();
-        report.reportMake(directory.getParentFile(), RoadConstractionModel.getRoadConstraction(), enumerated);
-        cancelOnClick();
     }
 
     @FXML private void editOnClick(){
@@ -92,11 +64,11 @@ public class ActionChooseController {
 
     @FXML private void enumerationOnClick(){
         try {
-            enumerated = true;
-            System.out.println("enum");
+            RoadConstractionModel.setEnumerated(true);
+//            RoadConstractionModel.setDirectory(RoadConstractionModel.getDirectory().getParentFile());
             for (ArrayList<Double> thinckness : RoadConstractionModel.layerThinckVariation()) {
                 System.out.println("in");
-                try (FileInputStream is = new FileInputStream(file);
+                try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
                      ObjectInputStream ois = new ObjectInputStream(is)) {
                     RoadConstraction roadConstraction = (RoadConstraction) ois.readObject();
                     for (int i = 0; i < roadConstraction.getTotalLayerList().size(); i++) {
@@ -104,7 +76,7 @@ public class ActionChooseController {
                     }
                     initialize();
                     RoadConstractionModel.setRoadConstraction(roadConstraction);
-                    analysisOnClick();
+                    RoadConstractionModel.analisys(actionChoosePane);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -112,7 +84,7 @@ public class ActionChooseController {
                 }
             }
         }catch (IOException e) {e.printStackTrace();}
-        System.out.println("finish");
+        Message.errorCatch(actionChoosePane,"Результати", "Перебір варіантів конструкції дорожнього покриття успішно завершена. Результати представлені у відповідному файлі звіту (.../report/...)");
     }
 
     @FXML private void optByCostOnClick(){

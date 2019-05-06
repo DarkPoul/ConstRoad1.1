@@ -318,8 +318,8 @@ public class InputController {
 
             FileChooser chooser = new FileChooser();
             File fileName = chooser.showSaveDialog(inputPane.getScene().getWindow());
-            ActionChooseController.setDirectory(fileName.getParentFile());
-            ActionChooseController.setFile(fileName);
+            RoadConstractionModel.setDirectory(fileName.getParentFile());
+            RoadConstractionModel.setFile(fileName);
 
             try(FileOutputStream fos = new FileOutputStream(fileName)){
                 ObjectOutputStream oos = new ObjectOutputStream(fos);

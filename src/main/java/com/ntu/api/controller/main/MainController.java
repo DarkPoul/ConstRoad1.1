@@ -75,8 +75,8 @@ public class MainController {
     @FXML public void openOnClick(){
         FileChooser fileChooser = new FileChooser();
         File fileName = fileChooser.showOpenDialog(main.getScene().getWindow());
-        ActionChooseController.setDirectory(fileName.getParentFile());
-        ActionChooseController.setFile(fileName);
+        RoadConstractionModel.setDirectory(fileName.getParentFile());
+        RoadConstractionModel.setFile(fileName);
 
         try(FileInputStream is = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(is)){

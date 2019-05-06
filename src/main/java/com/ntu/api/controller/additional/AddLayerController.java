@@ -28,7 +28,7 @@ public class AddLayerController {
     private static ObservableList<String> layerDepthList;
 
     private static Layer layerConstractList;
-    private RoadConstraction roadConstraction = InputController.getRoadConstraction();
+    private RoadConstraction roadConstraction = RoadConstractionModel.getRoadConstraction();
 
     @FXML public void initialize(){
         roadConstraction.layers();

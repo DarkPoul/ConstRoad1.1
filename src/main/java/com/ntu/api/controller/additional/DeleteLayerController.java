@@ -3,6 +3,7 @@ package com.ntu.api.controller.additional;
 import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.RoadConstraction;
+import com.ntu.api.model.RoadConstractionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,7 +30,7 @@ public class DeleteLayerController {
     TextArea layerPosition;
 
     private static ObservableList<String> layerList;
-    private RoadConstraction roadConstraction = InputController.getRoadConstraction();
+    private RoadConstraction roadConstraction = RoadConstractionModel.getRoadConstraction();
 
     @FXML public void initialize(){
         layerList = FXCollections.observableArrayList();

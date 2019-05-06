@@ -230,33 +230,33 @@ public class RoadConstraction extends Element implements Serializable {
         sb.append("Вологість грунту ").append(humidity).append("\n");
         sb.append("Поправка на конструктивні особливості дренажної конструкції ").append(correction).append("\n");
         sb.append("Строк експлуатації до капітального ремонту ").append(operationTime).append(" років \n");
-        sb.append("Сумарна кількість проїздів розрахункового навантаження за строк служби ").append(passageNumber).append("\n");
+        sb.append("Сумарна кількість проїздів розрахункового навантаження за строк служби ").append(passageNumber).append("\n\n");
         if(bituminous.size()>0) {
             sb.append("Шари асфальтобетонів: \n");
             for (Bituminous bituminous : bituminous) {
-                sb.append(bituminous.getName()).append("товщина " + bituminous.getThickness() + " \n");
+                sb.append(bituminous.getName()).append("товщина  " + bituminous.getThickness() + " \n");
             }
         }
         if(strengthenedMaterials.size()>0) {
-            sb.append("Шари матеріалів і грунтів укрвплених в'яжучими речовинами: \n");
+            sb.append("\nШари матеріалів і грунтів укрвплених в'яжучими речовинами: \n");
             for (StrengthenedMaterial strengthenedMaterial : strengthenedMaterials) {
                 sb.append(strengthenedMaterial.getName()).append(" товщина " + strengthenedMaterial.getThickness() + " \n");
             }
         }
         if(unstrengthenedMaterialsCover.size()>0) {
-            sb.append("Шари покриття з матеріалів і грунтів неукрвплених в'яжучими речовинами: \n");
+            sb.append("\nШари покриття з матеріалів і грунтів неукрвплених в'яжучими речовинами: \n");
             for (UnstrengthenedMaterial unstrengthenedMaterial : unstrengthenedMaterialsCover) {
                 sb.append(unstrengthenedMaterial.getName()).append(" товщина " + unstrengthenedMaterial.getThickness() + " \n");
             }
         }
         if(unstrengthenedMaterialsBase.size()>0) {
-            sb.append("Шари основи з матеріалів і грунтів неукрвплених в'яжучими речовинами: \n");
+            sb.append("\nШари основи з матеріалів і грунтів неукрвплених в'яжучими речовинами: \n");
             for (UnstrengthenedMaterial unstrengthenedMaterial : unstrengthenedMaterialsBase) {
                 sb.append(unstrengthenedMaterial.getName()).append(" товщина " + unstrengthenedMaterial.getThickness() + " \n");
             }
         }
         if(sands.size()>0) {
-            sb.append("Шари піску: \n");
+            sb.append("\nШари піску: \n");
             for (Sand sand : sands) {
                 sb.append(sand.getName()).append(" товщина " + sand.getThickness() + " \n");
             }

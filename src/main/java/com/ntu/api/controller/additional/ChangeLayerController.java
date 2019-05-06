@@ -5,6 +5,7 @@ import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
 import com.ntu.api.domain.RoadConstraction;
+import com.ntu.api.model.RoadConstractionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -39,7 +40,7 @@ public class ChangeLayerController {
     private static Integer layerPosition;
     private static Integer oldlayerPosition;
 
-    private RoadConstraction roadConstraction = InputController.getRoadConstraction();
+    private RoadConstraction roadConstraction = RoadConstractionModel.getRoadConstraction();
 
     @FXML public void initialize(){
         layerList = FXCollections.observableArrayList();
