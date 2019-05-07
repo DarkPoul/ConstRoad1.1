@@ -1,6 +1,5 @@
 package com.ntu.api.controller.additional;
 
-import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;

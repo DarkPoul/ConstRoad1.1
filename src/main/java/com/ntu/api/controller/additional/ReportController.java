@@ -5,10 +5,8 @@ import com.ntu.api.model.RoadConstractionModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class ReportController {
     @FXML private AnchorPane reportPane;

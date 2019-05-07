@@ -1,7 +1,6 @@
 package com.ntu.api.controller.main;
 
 import com.ntu.api.controller.additional.AboutController;
-import com.ntu.api.controller.additional.ActionChooseController;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
 import com.ntu.api.model.RoadConstractionModel;
@@ -110,5 +109,4 @@ public class MainController {
             e1.printStackTrace();
         }
     }
-
 }

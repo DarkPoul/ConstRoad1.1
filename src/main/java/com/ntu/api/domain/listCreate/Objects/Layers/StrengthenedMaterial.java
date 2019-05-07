@@ -152,6 +152,7 @@ public class StrengthenedMaterial extends Layer implements Serializable {
         sb.append(", material='").append(material).append('\'');
         sb.append(", bindingMark='").append(bindingMark).append('\'');
         sb.append(", elasticityModul=").append(elasticityModul);
+        sb.append("elasticModuleDeflection" + elasticModuleDeflection);
         sb.append(", variationCoeficientCE=").append(variationCoeficientCE);
         sb.append(", rLab=").append(rLab);
         sb.append(", minThickness=").append(minThickness);

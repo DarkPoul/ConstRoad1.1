@@ -1,11 +1,16 @@
 package com.ntu.api.model;
 
+import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
 import com.ntu.api.domain.listCreate.Objects.GroundWtParameters;
-import com.ntu.api.domain.listCreate.Objects.Layers.*;
+import com.ntu.api.domain.listCreate.Objects.Layers.Bituminous;
+import com.ntu.api.domain.listCreate.Objects.Layers.Layer;
+import com.ntu.api.domain.listCreate.Objects.Layers.RoadLayers;
+import com.ntu.api.domain.listCreate.Objects.Layers.Sand;
+import javafx.scene.layout.AnchorPane;
 import org.apache.commons.math3.special.Erf;
 
-
+import java.io.File;
 import java.util.ArrayList;
 
 public class RoadConstractionModel {
@@ -43,6 +48,7 @@ public class RoadConstractionModel {
     *  deflection - запас міцності за критерієм пружного прогину(загального модуля пружності) у відсотках від необхідного
     *  subGradeMovement - запас міцності за критерієм зсуву у грунті земляного полотна у відсотках від необхідного
     *  inviscLayerMovement - запас міцності за критерієм зсуву у шарі нев'язкого середовища у відсотках від необхідного
+    *  elasticModuleBase - модуль пружності шарів без шарів асвальтобетону (береться для розрахунку по згину, береться з розрахунку по прогину)
     * */
     private static RoadConstraction roadConstraction;
     private static final Integer staticLoadDuration = 600;
@@ -76,6 +82,12 @@ public class RoadConstractionModel {
     private static Double deflection;
     private static Double subGradeMovement;
     private static ArrayList<Double> inviscLayerMovement;
+    private static File directory;
+    private static File file;
+    private static boolean enumerated = false;
+    private static Double elasticModuleBase = 0.0;
+
+    private static Report report = new Report();
 
     public static RoadConstraction getRoadConstraction() {
         return roadConstraction;
@@ -176,7 +188,6 @@ public class RoadConstractionModel {
     public static void setRoadCost(Double roadCost) {
         RoadConstractionModel.roadCost = roadCost;
     }
-
     public static Double getTension() {
         return tension;
     }
@@ -189,12 +200,30 @@ public class RoadConstractionModel {
     public static ArrayList<Double> getInviscLayerMovement() {
         return inviscLayerMovement;
     }
+    public static File getDirectory() {
+        return directory;
+    }
+    public static void setDirectory(File directory) {
+        RoadConstractionModel.directory = directory;
+    }
+    public static File getFile() {
+        return file;
+    }
+    public static void setFile(File file) {
+        RoadConstractionModel.file = file;
+    }
+    public static void setEnumerated(boolean enumerated) {
+        RoadConstractionModel.enumerated = enumerated;
+    }
+    public static Report getReport() {
+        return report;
+    }
 
     //    метод розрахунку коефіцієнту запасу міцності за критерієм опору шарів з монолітних матеріалів розтягу при згині
     public static Double bendingTensionCalculation(){
         Double kb = 0.85;
         ArrayList<Layer> calculatedLayersList = invertLayerList(roadConstraction.getBituminous());
-        double calculatedElasticModule = roadConstraction.getEstimatedGroundWt().geteGr();
+        double calculatedElasticModule = elasticModuleBase;
         for (Layer temp: calculatedLayersList){
             Bituminous iterTemp = (Bituminous) temp;
             calculatedElasticModule = iterationElasticModule(temp,calculatedElasticModule,iterTemp.getElasticityModulTension());
@@ -220,6 +249,10 @@ public class RoadConstractionModel {
         ArrayList<Layer> calculatedLayersList = invertLayerList(roadConstraction.getTotalLayerList());
         double calculatedElasticModule = roadConstraction.getEstimatedGroundWt().geteGr();
         for (Layer temp: calculatedLayersList){
+            if(temp.equals(roadConstraction.getBituminous().get(roadConstraction.getBituminous().size()-1))){
+                elasticModuleBase = calculatedElasticModule;
+                System.out.println(elasticModuleBase);
+            }
             calculatedElasticModule = iterationElasticModule(temp,calculatedElasticModule,temp.getElasticModuleDeflection());
         }
         elasticModule = calculatedElasticModule;
@@ -526,19 +559,34 @@ public class RoadConstractionModel {
         return baseArrays;
     }
 
+    public static void analisys(AnchorPane pane){
+//        розрахунок на прогин
+        if(roadConstraction.getDesigionLoad().getName().equals("A1")){
+            Message.errorCatch(pane,"Попередження", "Для розрахункового навантаження А1 " +
+                    "розрахунок конструкції нежорсткого одягу за критерієм загального модуля пружності не виконується");
+        }
+        else {
+            elasticDeflectionCalculation();
+            elasticDeflectionReliabilityCalculation();
+        }
 
-//    public static void ios(File fileName){
-//        try(FileOutputStream os = new FileOutputStream(fileName); ObjectOutputStream oos = new ObjectOutputStream(os);
-//            FileInputStream is = new FileInputStream(fileName); ObjectInputStream ois = new ObjectInputStream(is))
-//        {
-//            oos.writeObject(user);
-//            User user = (User) ois.readObject();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
+//        розрахунок на згин
+        if(roadConstraction.getBituminous().size()>0) {
+            bendingTensionCalculation();
+            bendingTensionReliabilityCalculation();
+        }
+
+//        розрахунок по зсуву грунту земляного покриття
+        movementSubGradeCalculation();
+        movementSubGradeReliabilityCalculation();
+
+//        розрахунок по зсуву у нев'язких матеріалах
+        if(roadConstraction.getSands().size()>0) {
+            movementInviscidLayerCalculation();
+            movementInviscidLayerReliabilityCalculation();
+        }
+//      розрахунок ціни покриття
+        roadCost();
+        report.reportMake(directory.getParentFile(), RoadConstractionModel.getRoadConstraction(), enumerated);
+    }
 }

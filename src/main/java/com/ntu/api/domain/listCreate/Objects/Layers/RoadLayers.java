@@ -1,7 +1,6 @@
 package com.ntu.api.domain.listCreate.Objects.Layers;
 
 import com.ntu.api.domain.listCreate.Objects.Element;
-import com.ntu.api.domain.listCreate.Objects.Layers.Layer;
 
 import java.io.Serializable;
 import java.util.ArrayList;

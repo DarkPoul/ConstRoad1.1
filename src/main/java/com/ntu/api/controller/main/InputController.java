@@ -1,11 +1,13 @@
 package com.ntu.api.controller.main;
 
-import com.ntu.api.controller.additional.ActionChooseController;
 import com.ntu.api.domain.LayerT;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
-import com.ntu.api.domain.listCreate.Objects.*;
+import com.ntu.api.domain.listCreate.Objects.DesigionLoad;
+import com.ntu.api.domain.listCreate.Objects.Element;
+import com.ntu.api.domain.listCreate.Objects.Ground;
+import com.ntu.api.domain.listCreate.Objects.RoadType;
 import com.ntu.api.model.RoadConstractionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -204,7 +206,6 @@ public class InputController {
         Stage groundType = new Stage();
         groundType.setTitle("Карта дорожнього районування України за грунтово-геологічними умовами");
         groundType.setResizable(false);
-
         AnchorPane groundTypePane = null;
         try {
             groundTypePane = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/additional/groundType.fxml"));
