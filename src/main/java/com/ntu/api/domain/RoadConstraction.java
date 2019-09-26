@@ -2,6 +2,7 @@ package com.ntu.api.domain;
 
 import com.ntu.api.domain.listCreate.Objects.*;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
+import com.ntu.api.model.RoadConstractionModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,10 +24,10 @@ public class RoadConstraction extends Element implements Serializable {
     дренажних конструкцій у дорожньо-кліматичних зонах І-IV
     * humidity - вологість грунту
     * correction - поправка на конструктивні особливості дренажної конструкції
-    * roadLayers - список шарів покриття
     * operationTime - Строк експлуатації до капітального ремонту, років
     * passageNumber - Сумарна кількість проїздів розрахункового навантаження за строк служби
     * estimatedGroundMoisture - розрахункова вологість грунту
+
     * estimatedGroundWt - розрахункова вологість грунту
     * minElasticModule - мінімальний портрібний модуль пружності МПа для дорожнього одягу
     *
@@ -59,7 +60,6 @@ public class RoadConstraction extends Element implements Serializable {
     private ArrayList<UnstrengthenedMaterial> unstrengthenedMaterialsCover = new ArrayList<>();
     private ArrayList<UnstrengthenedMaterial> unstrengthenedMaterialsBase = new ArrayList<>();
     private ArrayList<Sand> sands = new ArrayList<>();
-
     private ArrayList<RoadLayers> roadLayers = new ArrayList<>();
 
     public RBCZ getRbcz() {
@@ -172,12 +172,6 @@ public class RoadConstraction extends Element implements Serializable {
     public void setSands(ArrayList<Sand> sands) {
         this.sands = sands;
     }
-    public ArrayList<RoadLayers> getRoadLayers() {
-        return roadLayers;
-    }
-    public void setRoadLayers(ArrayList<RoadLayers> roadLayers) {
-        this.roadLayers = roadLayers;
-    }
     public double getEstimatedGroundMoisture() {
         return estimatedGroundMoisture;
     }
@@ -213,6 +207,12 @@ public class RoadConstraction extends Element implements Serializable {
     }
     public void setEstimatedGroundWt(GroundWtParameters estimatedGroundWt) {
         this.estimatedGroundWt = estimatedGroundWt;
+    }
+    public ArrayList<RoadLayers> getRoadLayers() {
+        return roadLayers;
+    }
+    public void setRoadLayers(ArrayList<RoadLayers> roadLayers) {
+        this.roadLayers = roadLayers;
     }
 
     @Override
@@ -302,28 +302,6 @@ public class RoadConstraction extends Element implements Serializable {
         }
     }
 
-//    метод формування список шарів покриття
-    public void layers(){
-        roadLayers = new ArrayList<>();
-        roadLayers.add(new RoadLayers("Асфальтобетон",bituminous));
-        roadLayers.add(new RoadLayers("Матеріали і грунти укріплені в'яжучими речовинами",strengthenedMaterials));
-        roadLayers.add(new RoadLayers("Неукріплені матеріали покриття",unstrengthenedMaterialsCover));
-        roadLayers.add(new RoadLayers("Неукріплені матеріали основ",unstrengthenedMaterialsBase));
-        roadLayers.add(new RoadLayers("Шар нев'язкого середовища",sands));
-    }
-// метод формування списку обєктів - шарів покриття для відображення в фронт-складовій програми
-    public ArrayList<LayerT> layerTableList(){
-        ArrayList<LayerT> layers = new ArrayList<>();
-        int temp =1;
-        for(RoadLayers roadLayers: roadLayers){
-            for(Layer el:roadLayers.getLayers()){
-                layers.add(new LayerT(temp,roadLayers.getName(),el.getName() + " " + el.getMaterial(), el.getThickness()));
-                temp++;
-            }
-        }
-        return layers;
-    }
-
 //    метод формування списку - записів шарів покриття для відображення в фронт-складовій програми
     public ArrayList<String> layerTableStringList(){
         ArrayList<String> list = new ArrayList<>();
@@ -333,15 +311,6 @@ public class RoadConstraction extends Element implements Serializable {
         return list;
     }
 
-//    метод формування списку можливих товщин матеріалу - шару покриття
-    public ArrayList<String> depthList(Double start, Double finish){
-        ArrayList<String>list = new ArrayList<>();
-        while (start<=finish){
-            list.add(start.toString());
-            start=start+0.5;
-        }
-        return list;
-    }
 // метод для визначення типу шару дорожнього одягу
     public RoadLayers roadLayersCheck(String layerType){
         RoadLayers roadLayers = new RoadLayers();
@@ -376,15 +345,27 @@ public class RoadConstraction extends Element implements Serializable {
         return checkedRoadLines;
     }
 
-//    метод формування повного списку шарів дорожнього одягу
-//    метод використовується при розрахунку загального модуля пружності
-    public ArrayList<Layer> getTotalLayerList(){
-        ArrayList<Layer> temp = new ArrayList<>();
-        for(RoadLayers roadLar: roadLayers){
-                for (Layer layer : roadLar.getLayers()) {
-                    temp.add(layer);
-                }
-        }
-        return temp;
+    //    метод формування список шарів покриття
+    public void layers(){
+        roadLayers = new ArrayList<>();
+        roadLayers.add(new RoadLayers("Асфальтобетон", bituminous));
+        roadLayers.add(new RoadLayers("Матеріали і грунти укріплені в'яжучими речовинами", strengthenedMaterials));
+        roadLayers.add(new RoadLayers("Неукріплені матеріали покриття",unstrengthenedMaterialsCover));
+        roadLayers.add(new RoadLayers("Неукріплені матеріали основ",unstrengthenedMaterialsBase));
+        roadLayers.add(new RoadLayers("Шар нев'язкого середовища",sands));
     }
+
+    // метод формування списку обєктів - шарів покриття для відображення в фронт-складовій програми
+    public ArrayList<LayerT> layerTableList(){
+        ArrayList<LayerT> layers = new ArrayList<>();
+        int temp =1;
+        for(RoadLayers roadLayers: roadLayers){
+            for(Layer el:roadLayers.getLayers()){
+                layers.add(new LayerT(temp,roadLayers.getName(),el.getName() + " " + el.getMaterial(), el.getThickness()));
+                temp++;
+            }
+        }
+        return layers;
+    }
+
 }

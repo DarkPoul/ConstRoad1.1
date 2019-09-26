@@ -270,7 +270,7 @@ public class Report {
                     dir.mkdir();
 
                     StringBuilder fileName = new StringBuilder();
-                    for (Layer layer : RoadConstractionModel.getRoadConstraction().getTotalLayerList()) {
+                    for (Layer layer : RoadConstractionModel.getTotalLayerList()) {
                         fileName.append(layer.getThickness() + " ");
                     }
 

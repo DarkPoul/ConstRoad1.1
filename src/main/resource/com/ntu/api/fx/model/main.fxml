@@ -20,6 +20,8 @@
                         <MenuItem mnemonicParsing="false" onAction="#newOnClick" text="New" />
                         <MenuItem mnemonicParsing="false" onAction="#openOnClick" text="Open" />
                         <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#settingOnClick" text="Settings" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem mnemonicParsing="false" onAction="#closeOnClick" text="Close" />
                   </items>
                 </Menu>

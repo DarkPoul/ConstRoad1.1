@@ -1,9 +1,9 @@
 package com.ntu.api.controller.additional;
 
+import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
-import com.ntu.api.domain.listCreate.Objects.ElasticModul;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
 import com.ntu.api.model.RoadConstractionModel;
 import javafx.collections.FXCollections;
@@ -27,10 +27,12 @@ public class AddLayerController {
     private static ObservableList<String> layerDepthList;
 
     private static Layer layerConstractList;
-    private RoadConstraction roadConstraction = RoadConstractionModel.getRoadConstraction();
+    private RoadConstraction roadConstraction = InputController.getRoadConstraction();
 
     @FXML public void initialize(){
-        roadConstraction.layers();
+        if(InputController.isEditBool()) {
+            roadConstraction.layers();
+        }
 
         layerTypeList = FXCollections.observableArrayList();
         layerConstractionList = FXCollections.observableArrayList();
@@ -54,7 +56,6 @@ public class AddLayerController {
     @FXML public void layerTypeOnClick(){
         try {
             boxClear(layerConstraction);
-            boxClear(layerDepth);
             layerDepth.getItems().setAll(new ArrayList<>());
             layerConstraction.getItems().setAll(Lists.getLayersList().get(layerType.getSelectionModel().getSelectedIndex()));
         }
@@ -93,7 +94,8 @@ public class AddLayerController {
                             getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness() ||
                     Double.parseDouble(layerDepth.getSelectionModel().getSelectedItem())>
                             Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
-                                    getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness())
+                                    getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness() ||
+                    layerDepth == null)
             {
                 Message.errorCatch(addLayerPane,"Error", "Введена товщина шару дорожнього одягу є " +
                         "недопустимою для даної конструкції шару дорожнього одягу.");
@@ -106,7 +108,7 @@ public class AddLayerController {
                         temp.setThicknessVariationCoeficient(2.84 / (10.2 + temp.getThickness()));
                         Bituminous tempBitum = (Bituminous) temp;
                         tempBitum.setElasticModuleDeflection((double)tempBitum.getShortElasticModuls().get(0).getElasticModule());
-                        tempBitum.setElasticModuleMovement(elasticModuleMovementChoose(tempBitum));
+                        tempBitum.setElasticModuleMovement(InputController.elasticModuleMovementChoose(tempBitum));
                         roadConstraction.getBituminous().add(tempBitum);
                     } else {
                         temp.setThicknessVariationCoeficient(2.84 / (5.6 + temp.getThickness()));
@@ -133,6 +135,7 @@ public class AddLayerController {
                     roadConstraction.layers();
                     okOnClick();
                 } catch (RuntimeException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -157,17 +160,7 @@ public class AddLayerController {
                 getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMinThickness();
         Double finish = Lists.getRoadLayers().get(layerType.getSelectionModel().getSelectedIndex()).
                 getLayers().get(layerConstraction.getSelectionModel().getSelectedIndex()).getMaxThickness();
-        return roadConstraction.depthList(start, finish);
-    }
-
-    private Double elasticModuleMovementChoose(Bituminous bitum){
-        Double elasticModuleMovement = 0.0;
-        for(ElasticModul modul: bitum.getShortElasticModuls()){
-            if(modul.getTemperature().equals(roadConstraction.getRbcz().getCalculatedTemperature())){
-                elasticModuleMovement = (double)modul.getElasticModule();
-            }
-        }
-        return elasticModuleMovement;
+        return RoadConstractionModel.depthList(start, finish);
     }
 
     private void okOnClick(){

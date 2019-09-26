@@ -5,7 +5,10 @@ import com.ntu.api.domain.listCreate.Objects.Layers.*;
 import com.ntu.api.domain.listCreate.Reader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Lists {
     private static int temp =0;
@@ -40,10 +43,7 @@ public class Lists {
     private static ArrayList<String> roadLayersName;
     private static ArrayList<ArrayList<String>> layersList;
 
-
-
-    private static String root = "/home/arsen/Java/ConstRoad/base";
-
+    private static String root;
 
     public static ArrayList<RBCZ> getRbczList() {
         return rbczList;
@@ -136,7 +136,16 @@ public class Lists {
         return layersList;
     }
 
+    public static String getRoot() {
+        return root;
+    }
+    public static void setRoot(String root) {
+        Lists.root = root;
+    }
+
     public static void listReader() {
+        System.out.println(root);
+
         rbczList = create(new File(root + "/climateZoneList"));
         rbczName = nameList(rbczList);
         roadList = create(new File(root + "/roadList"));

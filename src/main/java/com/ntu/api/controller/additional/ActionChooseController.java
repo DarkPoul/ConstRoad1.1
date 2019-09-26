@@ -40,7 +40,8 @@ public class ActionChooseController {
             report.setScene(new Scene(reportPane));
             report.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Message.errorCatch(actionChoosePane, "Error", "Analysis Error");
+//            e.printStackTrace();
         }
     }
 
@@ -59,7 +60,8 @@ public class ActionChooseController {
             edit.setScene(new Scene(editDlg));
             edit.show();
         } catch (IOException e) {
-            Message.errorCatch(actionChoosePane, "Error", "Edit Error");
+            e.printStackTrace();
+//            Message.errorCatch(actionChoosePane, "Error", "Edit Error");
         }
     }
 
@@ -72,8 +74,8 @@ public class ActionChooseController {
                 try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
                      ObjectInputStream ois = new ObjectInputStream(is)) {
                     RoadConstraction roadConstraction = (RoadConstraction) ois.readObject();
-                    for (int i = 0; i < roadConstraction.getTotalLayerList().size(); i++) {
-                        roadConstraction.getTotalLayerList().get(i).setThickness(thinckness.get(i)/100);
+                    for (int i = 0; i < RoadConstractionModel.getTotalLayerList().size(); i++) {
+                        RoadConstractionModel.getTotalLayerList().get(i).setThickness(thinckness.get(i)/100);
                     }
                     initialize();
                     RoadConstractionModel.setRoadConstraction(roadConstraction);

@@ -1,8 +1,10 @@
 package com.ntu.api.controller.main;
 
 import com.ntu.api.controller.additional.AboutController;
+import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
+import com.ntu.api.domain.listCreate.Main;
 import com.ntu.api.model.RoadConstractionModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Scanner;
 
 public class MainController {
     @FXML
@@ -27,6 +30,20 @@ public class MainController {
         this.roadConstraction = roadConstraction;
     }
 
+    @FXML public void initialize(){
+        FileReader fileReader = null;
+        try {
+            String root;
+            fileReader = new FileReader("src/main/root");
+            Scanner scanner = new Scanner(fileReader);
+            root = scanner.nextLine();
+            Lists.setRoot(root);
+            Main.start();
+//            Lists.listReader();
+        } catch (FileNotFoundException e) {
+           Message.errorCatch(main,"Помилка корневої папки","Перевірте правильність введення адреси кореневої папки в файлі root");
+        }
+    }
     @FXML public void helpOnClick(){
         helpAboutOpen("Help", "Help Error", false);
     }
@@ -54,6 +71,7 @@ public class MainController {
     }
 
     @FXML public void newOnClick(){
+        RoadConstractionModel.setRoadConstraction(new RoadConstraction());
         InputController.setEditBool(false);
         Stage input = new Stage();
         input.setTitle("Введення нової конструкції дорожнього одягу");
@@ -107,6 +125,24 @@ public class MainController {
             actionChoose.show();
         } catch (IOException e1) {
             e1.printStackTrace();
+        }
+    }
+
+    @FXML public void settingOnClick(){
+        Stage settingChoose = new Stage();
+        settingChoose.setTitle("Вибір корневого каталогу");
+        settingChoose.setResizable(false);
+
+        AnchorPane settingPane = null;
+        try {
+            settingPane = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/additional/folderChoose.fxml"));
+            settingChoose.initOwner(main.getScene().getWindow());
+            settingChoose.initModality(Modality.WINDOW_MODAL);
+            settingChoose.setScene(new Scene(settingPane));
+            settingChoose.show();
+        } catch (IOException e) {
+            Message.errorCatch(main,"Error","Setting Error");
+            e.printStackTrace();
         }
     }
 }

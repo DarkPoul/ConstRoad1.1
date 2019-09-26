@@ -4,10 +4,8 @@ import com.ntu.api.domain.LayerT;
 import com.ntu.api.domain.Lists;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
-import com.ntu.api.domain.listCreate.Objects.DesigionLoad;
-import com.ntu.api.domain.listCreate.Objects.Element;
-import com.ntu.api.domain.listCreate.Objects.Ground;
-import com.ntu.api.domain.listCreate.Objects.RoadType;
+import com.ntu.api.domain.listCreate.Objects.*;
+import com.ntu.api.domain.listCreate.Objects.Layers.Bituminous;
 import com.ntu.api.model.RoadConstractionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -83,6 +81,9 @@ public class InputController {
     public static void setEditBool(boolean editBool) {
         InputController.editBool = editBool;
     }
+    public static boolean isEditBool() {
+        return editBool;
+    }
 
     @FXML public void initialize(){
         okButton.textProperty().set("Додати нову конструкцію дорожнього одягу");
@@ -136,6 +137,7 @@ public class InputController {
 
         roadConstraction = new RoadConstraction();
         if(editBool){
+            layers.clear();
             okButton.textProperty().set("Зберегти конструкцію дорожнього одягу");
             roadConstraction = RoadConstractionModel.getRoadConstraction();
             rbczBox.promptTextProperty().set(roadConstraction.getRbcz().getName());
@@ -147,7 +149,6 @@ public class InputController {
             dessigionLoadBox.promptTextProperty().set(roadConstraction.getDesigionLoad().getName());
             roadLinesBox.promptTextProperty().set(roadConstraction.getRoadLines().getName());
             groundCorrectionBox.promptTextProperty().set(roadConstraction.getGroundCorection().getName());
-            layers.clear();
             layers.setAll(roadConstraction.layerTableList());
             passageNumber.setText(String.valueOf(roadConstraction.getPassageNumber()));
             operationTerm.setText(String.valueOf(roadConstraction.getOperationTime()));
@@ -246,7 +247,8 @@ public class InputController {
                 }
             });
         } catch (IOException e) {
-            Message.errorCatch(inputPane,"Error", "Input Error");
+            e.printStackTrace();
+//            Message.errorCatch(inputPane,"Error", "Input Error");
         }
 
     }
@@ -271,7 +273,8 @@ public class InputController {
                 }
             });
         } catch (IOException e) {
-            Message.errorCatch(inputPane,"Error", "InputError");
+            e.printStackTrace();
+//            Message.errorCatch(inputPane,"Error", "InputError");
         }
     }
 
@@ -313,6 +316,7 @@ public class InputController {
             roadConstraction.setOperationTime(Double.parseDouble(operationTerm.getText()));
             roadConstraction.setPassageNumber(Double.parseDouble(passageNumber.getText()));
             roadConstraction.setTotalLayersThickness(RoadConstractionModel.totalLayersThickness(roadConstraction));
+//            roadConstraction.setBituminous((ArrayList<Bituminous>) roadConstraction.getRoadLayers().get(0).getLayers());
             RoadConstractionModel.setRoadConstraction(roadConstraction);
             RoadConstractionModel.preCalculation();
             RoadConstractionModel.minElasticModuleChoose();
@@ -496,5 +500,15 @@ public class InputController {
             stringList.add(el.toString());
         }
         return stringList;
+    }
+
+    public static Double elasticModuleMovementChoose(Bituminous bitum){
+        Double elasticModuleMovement = 0.0;
+        for(ElasticModul modul: bitum.getShortElasticModuls()){
+            if(modul.getTemperature().equals(roadConstraction.getRbcz().getCalculatedTemperature())){
+                elasticModuleMovement = (double)modul.getElasticModule();
+            }
+        }
+        return elasticModuleMovement;
     }
 }

@@ -1,7 +1,9 @@
 package com.ntu.api.model;
 
+import com.ntu.api.domain.LayerT;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
+import com.ntu.api.domain.listCreate.Objects.ElasticModul;
 import com.ntu.api.domain.listCreate.Objects.GroundWtParameters;
 import com.ntu.api.domain.listCreate.Objects.Layers.Bituminous;
 import com.ntu.api.domain.listCreate.Objects.Layers.Layer;
@@ -49,6 +51,7 @@ public class RoadConstractionModel {
     *  subGradeMovement - запас міцності за критерієм зсуву у грунті земляного полотна у відсотках від необхідного
     *  inviscLayerMovement - запас міцності за критерієм зсуву у шарі нев'язкого середовища у відсотках від необхідного
     *  elasticModuleBase - модуль пружності шарів без шарів асвальтобетону (береться для розрахунку по згину, береться з розрахунку по прогину)
+    *  roadLayers - список шарів покриття
     * */
     private static RoadConstraction roadConstraction;
     private static final Integer staticLoadDuration = 600;
@@ -223,12 +226,13 @@ public class RoadConstractionModel {
     public static Double bendingTensionCalculation(){
         Double kb = 0.85;
         ArrayList<Layer> calculatedLayersList = invertLayerList(roadConstraction.getBituminous());
+        double basecalculatedElasticModule = elasticModuleBase;
         double calculatedElasticModule = elasticModuleBase;
         for (Layer temp: calculatedLayersList){
             Bituminous iterTemp = (Bituminous) temp;
             calculatedElasticModule = iterationElasticModule(temp,calculatedElasticModule,iterTemp.getElasticityModulTension());
         }
-        Double E1E2 = calculatedElasticModule/roadConstraction.getEstimatedGroundWt().geteGr();
+        Double E1E2 = calculatedElasticModule/basecalculatedElasticModule;
         Double hD= bitumThickness()/calculatedWeelImprintDiameter;
         Double ar = 0.083*Math.pow(Math.log(E1E2),2.2)+1.87;
         Double br = 0.00004*Math.pow(E1E2,1.4)+0.007;
@@ -246,12 +250,13 @@ public class RoadConstractionModel {
 
 //    метод розрахунку коефіцієнт запасу міцності за критерієм пружного прогину(загального модуля пружності)
     public static Double elasticDeflectionCalculation(){
-        ArrayList<Layer> calculatedLayersList = invertLayerList(roadConstraction.getTotalLayerList());
+        ArrayList<Layer> calculatedLayersList = invertLayerList(getTotalLayerList());
         double calculatedElasticModule = roadConstraction.getEstimatedGroundWt().geteGr();
         for (Layer temp: calculatedLayersList){
-            if(temp.equals(roadConstraction.getBituminous().get(roadConstraction.getBituminous().size()-1))){
+            if(roadConstraction.getBituminous().size()>0){
+                if(temp.equals(roadConstraction.getBituminous().get(roadConstraction.getBituminous().size()-1))){
                 elasticModuleBase = calculatedElasticModule;
-                System.out.println(elasticModuleBase);
+                }
             }
             calculatedElasticModule = iterationElasticModule(temp,calculatedElasticModule,temp.getElasticModuleDeflection());
         }
@@ -505,7 +510,7 @@ public class RoadConstractionModel {
 //      метод формування списку, який включає список можливих товщин шарів дорожнього одягу
     private static ArrayList<ArrayList<Double>> layersThincknessArray(){
         ArrayList<ArrayList<Double>> layersThinkArray = new ArrayList<>();
-        for(Layer layer: roadConstraction.getTotalLayerList()){
+        for(Layer layer: getTotalLayerList()){
             ArrayList<Double> arrayThick = new ArrayList<>();
             Double start = layer.getMinThickness();
             Double finish = layer.getMaxThickness();
@@ -588,5 +593,27 @@ public class RoadConstractionModel {
 //      розрахунок ціни покриття
         roadCost();
         report.reportMake(directory.getParentFile(), RoadConstractionModel.getRoadConstraction(), enumerated);
+    }
+
+//    метод формування списку можливих товщин матеріалу - шару покриття
+    public static ArrayList<String> depthList(Double start, Double finish){
+        ArrayList<String>list = new ArrayList<>();
+        while (start<=finish){
+            list.add(start.toString());
+            start=start+0.5;
+        }
+        return list;
+    }
+
+    //    метод формування повного списку шарів дорожнього одягу
+//    метод використовується при розрахунку загального модуля пружності
+    public static ArrayList<Layer> getTotalLayerList(){
+        ArrayList<Layer> temp = new ArrayList<>();
+        for(RoadLayers roadLar: roadConstraction.getRoadLayers()){
+            for (Layer layer : roadLar.getLayers()) {
+                temp.add(layer);
+            }
+        }
+        return temp;
     }
 }
