@@ -43,7 +43,7 @@ public class Lists {
     private static ArrayList<String> roadLayersName;
     private static ArrayList<ArrayList<String>> layersList;
 
-    private static String root;
+    private static String root = "/home/arsen/Java/ConstRoad/base";
 
     public static ArrayList<RBCZ> getRbczList() {
         return rbczList;
@@ -144,7 +144,6 @@ public class Lists {
     }
 
     public static void listReader() {
-        System.out.println(root);
 
         rbczList = create(new File(root + "/climateZoneList"));
         rbczName = nameList(rbczList);

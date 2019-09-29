@@ -17,6 +17,8 @@ public class ConstRoadApp extends Application {
         Parent main = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/main.fxml"));
         primaryStage.setScene(new Scene(main));
         primaryStage.show();
+        Main.start();
         Lists.listReader();
+
     }
 }

@@ -1,20 +1,25 @@
 package com.ntu.api.domain.listCreate;
 
 import com.ntu.api.domain.Lists;
+import com.ntu.api.domain.Message;
 import com.ntu.api.domain.listCreate.Objects.*;
 import com.ntu.api.domain.listCreate.Objects.Layers.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Main {
-    private static String root = "/home/arsen/Java/ConstRoad/base";
+    private static String root;
     public static void main(String[] args) {
         start();
     }
 
     public static void start(){
+        root = Lists.getRoot();
         Writer writer = new Writer();
         Lists lists = new Lists();
         ArrayList<RBCZ> list = new ArrayList<>();
@@ -844,8 +849,6 @@ public class Main {
         File unstrengthenedMaterialsesCover = new File(root, "/unstrengthenedMaterialsCover");
         writer.write(unstrengthenedMaterialsesCover,unstrengthenedMaterialsCover);
 
-
-
         ArrayList<Sand> sand = new ArrayList<>();
         sand.add(new Sand("G1", "Пісок крупний","-","-",7.0, 0.05, 0.37, g1,15.0,30.0,408.0));
         sand.add(new Sand("G2", "Пісок середньої крупності","-","-",6.0, 0.07, 0.37, g2,15.0,30.0,240.0));
@@ -875,8 +878,6 @@ public class Main {
         File layers = new File(root, "/roadLayers");
         writer.write(layers, roadLayers);
 
-        Lists.listReader();
-
         ArrayList<ArrayList<String>> layersNames = new ArrayList<>();
         layersNames.add(Lists.getBituminousName());
         layersNames.add(Lists.getStrengthenedMaterialsName());
@@ -886,35 +887,5 @@ public class Main {
 
         File layersName = new File(root,"/layersName");
         writer.write(layersName,layersNames);
-
-
-//        System.out.println(Lists.getRbczList());
-//        System.out.println(Lists.getRbczName());
-//        System.out.println(Lists.getRoadList());
-//        System.out.println(Lists.getRoadName());
-//        System.out.println(Lists.getGroundType());
-//        System.out.println(Lists.getSoilName());
-//        System.out.println(Lists.getSoilList());
-//        System.out.println(Lists.getGrounds());
-//        System.out.println(Lists.getGroundsName());
-//        System.out.println(Lists.getRoadTypeList());
-//        System.out.println(Lists.getRoadGroundLoad());
-//        System.out.println(Lists.getGroundCorrection());
-//        System.out.println(Lists.getGroundCorrectionName());
-//        System.out.println(Lists.getBituminousList());
-//        System.out.println(Lists.getBituminousName());
-//        System.out.println(Lists.getStrengthenedMaterialsList());
-//        System.out.println(Lists.getStrengthenedMaterialsName());
-//        System.out.println(Lists.getUnstrengthenedMaterialsCoverList());
-//        System.out.println(Lists.getUnstrengthenedMaterialsCoverName());
-//        System.out.println(Lists.getUnstrengthenedMaterialsBaseList());
-//        System.out.println(Lists.getUnstrengthenedMaterialsBaseName());
-//        System.out.println(Lists.getSands());
-//        System.out.println(Lists.getSandsName());
-//        System.out.println(Lists.getRoadLayers());
-//        System.out.println(Lists.getRoadLayersName());
-//        System.out.println(Lists.getLayersList());
-
-
     }
 }
