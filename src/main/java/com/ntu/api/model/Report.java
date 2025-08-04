@@ -4,6 +4,7 @@ import com.ntu.api.domain.RoadConstraction;
 import com.ntu.api.domain.listCreate.Objects.Layers.Layer;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -253,10 +254,15 @@ public class Report {
     }
 
     private void write(File directory, RoadConstraction roadConstraction, boolean bool){
-        System.out.println("in write " + directory);
         try {
-            File fileForReport = new File(directory, "report"+ Calendar.getInstance().getTime() +".txt");
-            File fileExcReport = new File(directory, "excellentReport"+ Calendar.getInstance().getTime() + ".txt");
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+            File fileForReport = new File(directory, "report"+ timeStamp +".txt");
+            File fileExcReport = new File(directory, "excellentReport"+ timeStamp + ".txt");
+            System.out.println("in write " + directory);
+            System.out.println("in write " + fileForReport);
+            System.out.println("in write " + fileExcReport);
+//            File fileForReport = new File(directory, "report"+ Calendar.getInstance().getTime() +".txt");
+//            File fileExcReport = new File(directory, "excellentReport"+ Calendar.getInstance().getTime() + ".txt");
             if(bool){
                 if (excellentBool == true) {
                     excellentResultWriter = new FileWriter(fileExcReport, true);
@@ -266,8 +272,9 @@ public class Report {
                     if(!directoryForRoadConstr.exists()) {
                         directoryForRoadConstr.mkdir();
                     }
-                    String dirName = Calendar.getInstance().getTime().toString();
-                    File dir = new File(directoryForRoadConstr,dirName);
+//                    String dirName = Calendar.getInstance().getTime().toString();
+//                    File dir = new File(directoryForRoadConstr,dirName);
+                    File dir = new File(directoryForRoadConstr, timeStamp);
                     dir.mkdir();
 
                     StringBuilder fileName = new StringBuilder();

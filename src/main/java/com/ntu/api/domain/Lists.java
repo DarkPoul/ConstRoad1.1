@@ -7,6 +7,7 @@ import com.ntu.api.domain.listCreate.Reader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -43,7 +44,7 @@ public class Lists {
     private static ArrayList<String> roadLayersName;
     private static ArrayList<ArrayList<String>> layersList;
 
-    private static String root = "/home/arsen/Java/ConstRoad/base";
+    private static String root = Paths.get("base").toAbsolutePath().toString();
 
     public static ArrayList<RBCZ> getRbczList() {
         return rbczList;
