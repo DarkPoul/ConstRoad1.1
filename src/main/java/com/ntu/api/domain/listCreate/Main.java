@@ -887,5 +887,6 @@ public class Main {
 
         File layersName = new File(root,"/layersName");
         writer.write(layersName,layersNames);
+        Lists.listReader();
     }
 }

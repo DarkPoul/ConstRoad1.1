@@ -253,9 +253,10 @@ public class Report {
     }
 
     private void write(File directory, RoadConstraction roadConstraction, boolean bool){
+        System.out.println("in write " + directory);
         try {
-            File fileForReport = new File(directory, "report"+ Calendar.getInstance().getTime() +".dat");
-            File fileExcReport = new File(directory, "excellentReport"+ Calendar.getInstance().getTime() + ".dat");
+            File fileForReport = new File(directory, "report"+ Calendar.getInstance().getTime() +".txt");
+            File fileExcReport = new File(directory, "excellentReport"+ Calendar.getInstance().getTime() + ".txt");
             if(bool){
                 if (excellentBool == true) {
                     excellentResultWriter = new FileWriter(fileExcReport, true);
@@ -323,6 +324,7 @@ public class Report {
             fileWriter.write(roadCost);
             fileWriter.write("\n\n");
             fileWriter.flush();
+            System.out.println("in write " + fileWriter);
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddLayerController {
     @FXML AnchorPane addLayerPane;
@@ -56,7 +57,7 @@ public class AddLayerController {
     @FXML public void layerTypeOnClick(){
         try {
             boxClear(layerConstraction);
-            layerDepth.getItems().setAll(new ArrayList<>());
+            layerDepth.getItems().setAll(String.valueOf(new ArrayList<>()));
             layerConstraction.getItems().setAll(Lists.getLayersList().get(layerType.getSelectionModel().getSelectedIndex()));
         }
         catch (RuntimeException e){}

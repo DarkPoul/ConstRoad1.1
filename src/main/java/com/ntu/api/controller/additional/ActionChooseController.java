@@ -70,7 +70,6 @@ public class ActionChooseController {
             RoadConstractionModel.setEnumerated(true);
 //            RoadConstractionModel.setDirectory(RoadConstractionModel.getDirectory().getParentFile());
             for (ArrayList<Double> thinckness : RoadConstractionModel.layerThinckVariation()) {
-                System.out.println("in");
                 try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
                      ObjectInputStream ois = new ObjectInputStream(is)) {
                     RoadConstraction roadConstraction = (RoadConstraction) ois.readObject();

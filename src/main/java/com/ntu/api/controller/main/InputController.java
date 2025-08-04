@@ -87,7 +87,7 @@ public class InputController {
 
     @FXML public void initialize(){
         okButton.textProperty().set("Додати нову конструкцію дорожнього одягу");
-        Lists.listReader();
+        okButton.textProperty().set("Додати нову конструкцію дорожнього одягу");
         rbczList = FXCollections.observableArrayList();
         roadList = FXCollections.observableArrayList();
         sollsList = FXCollections.observableArrayList();
