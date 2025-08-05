@@ -7,6 +7,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Report {
     private boolean excellentBool = true;
@@ -122,7 +123,7 @@ public class Report {
     public void reportMake(File directory, RoadConstraction roadConstraction, boolean bool){
         directoryForReport = new File(directory, "reports");
         if(!directoryForReport.exists()) {
-            directoryForReport.mkdir();
+            directoryForReport.mkdirs();
         }
         prepeare();
         write(directoryForReport, roadConstraction, bool);
@@ -255,46 +256,53 @@ public class Report {
 
     private void write(File directory, RoadConstraction roadConstraction, boolean bool){
         try {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-            File fileForReport = new File(directory, "report"+ timeStamp +".txt");
-            File fileExcReport = new File(directory, "excellentReport"+ timeStamp + ".txt");
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
+            File fileForReport = new File(directory, "report" + timestamp + ".dat");
+            File fileExcReport = new File(directory, "excellentReport" + timestamp + ".dat");
             System.out.println("in write " + directory);
-            System.out.println("in write " + fileForReport);
-            System.out.println("in write " + fileExcReport);
+//            System.out.println("in write " + fileForReport);
+//            System.out.println("in write " + fileExcReport);
 //            File fileForReport = new File(directory, "report"+ Calendar.getInstance().getTime() +".txt");
 //            File fileExcReport = new File(directory, "excellentReport"+ Calendar.getInstance().getTime() + ".txt");
+            System.out.println(true+"3");
+            bool=true;
             if(bool){
-                if (excellentBool == true) {
+                excellentBool = true;
+                if (excellentBool) {
                     excellentResultWriter = new FileWriter(fileExcReport, true);
                     print(excellentResultWriter, roadConstraction);
-
                     File directoryForRoadConstr = new File(directory.getParentFile(), "road constraction");
                     if(!directoryForRoadConstr.exists()) {
-                        directoryForRoadConstr.mkdir();
+                        directoryForRoadConstr.mkdirs();
                     }
 //                    String dirName = Calendar.getInstance().getTime().toString();
 //                    File dir = new File(directoryForRoadConstr,dirName);
-                    File dir = new File(directoryForRoadConstr, timeStamp);
-                    dir.mkdir();
+                    File dir = new File(directoryForRoadConstr, timestamp);
+                    dir.mkdirs();
 
                     StringBuilder fileName = new StringBuilder();
                     for (Layer layer : RoadConstractionModel.getTotalLayerList()) {
-                        fileName.append(layer.getThickness() + " ");
+                        if (fileName.length()>0){
+                            fileName.append(layer.getThickness()).append("_");
+                        }
+
                     }
 
-                    File fileForWrite = new File(dir, fileName.toString());
-                    fileForWrite.createNewFile();
+                    File fileForWrite = new File(dir, fileName.toString() + ".txt");
+                    System.out.println(true + "2");
                     try (FileOutputStream fos = new FileOutputStream(fileForWrite);
                          ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                         oos.writeObject(RoadConstractionModel.getRoadConstraction());
                         oos.flush();
+                        System.out.println(true);
                     } catch (FileNotFoundException e) {
+                        System.out.println(e);
                         e.printStackTrace();
                     }
                 }
             }
             else {
-                if (excellentBool == true) {
+                if (excellentBool) {
                     excellentResultWriter = new FileWriter(fileExcReport, true);
                     print(excellentResultWriter, roadConstraction);
                 } else {

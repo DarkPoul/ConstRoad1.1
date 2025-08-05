@@ -16,10 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javafx.stage.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -159,6 +156,7 @@ public class InputController {
         Stage rbcz = new Stage();
         rbcz.setTitle("Дорожньо-кліматична карта України");
         rbcz.setResizable(false);
+        rbcz.initStyle(StageStyle.UNDECORATED);
 
         AnchorPane rbczPane = null;
         try {
@@ -183,6 +181,7 @@ public class InputController {
         Stage solls = new Stage();
         solls.setTitle("Тип земляного полотна");
         solls.setResizable(false);
+        solls.initStyle(StageStyle.UNDECORATED);
 
         AnchorPane sollsPane = null;
         try {
@@ -207,6 +206,7 @@ public class InputController {
         Stage groundType = new Stage();
         groundType.setTitle("Карта дорожнього районування України за грунтово-геологічними умовами");
         groundType.setResizable(false);
+        groundType.initStyle(StageStyle.UNDECORATED);
         AnchorPane groundTypePane = null;
         try {
             groundTypePane = FXMLLoader.load(getClass().getResource("/com/ntu/api/fx/model/additional/groundType.fxml"));

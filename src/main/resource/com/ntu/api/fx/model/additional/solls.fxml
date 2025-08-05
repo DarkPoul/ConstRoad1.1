@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="sollsPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ntu.api.controller.additional.SollsController">
+<AnchorPane fx:id="sollsPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ntu.api.controller.additional.SollsController">
    <children>
       <ScrollPane prefHeight="407.0" prefWidth="938.0">
          <content>
@@ -35,7 +36,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                            </padding>
                            <font>
-                              <Font size="15.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
                         <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#t2OnClick" text="Грунти при глибокому заляганні грунтових вод, тривалому застої води в бічних канавах і наявності нижнього шару основи з дискретних матеріалів у дорожньому одязі на межі поділу із земляним полотном" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
@@ -46,7 +47,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                            </padding>
                            <font>
-                              <Font size="15.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
                         <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#t3OnClick" text="Грунти при близькому заляганні грунтових вод і наявності нижнього шару основи з дискретних матеріалів у дорожньому одязі на межі поділу із земляним полотном" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2">
@@ -57,7 +58,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                            </padding>
                            <font>
-                              <Font size="15.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
                         <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#t4OnClick" text="Грунти при глибокому заляганні грунтових вод, забезпеченому поверхневому водовідводі та наявності щільного монолітного нижнього шару основи у дорожньому одязі на межі поділу із земляним полотном" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3">
@@ -68,7 +69,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                            </padding>
                            <font>
-                              <Font size="15.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
                         <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#t5OnClick" text="Грунти при глибокому заляганні грунтових вод, застої води в бічних канавах і наявності щільного монолітного нижнього шару основи у дорожньому одязі на межі поділу із земляним полотном" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
@@ -79,7 +80,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                            </padding>
                            <font>
-                              <Font size="15.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
                         <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cancelOnClick" text="Cancel" textAlignment="CENTER" GridPane.rowIndex="5">

@@ -15,23 +15,28 @@ public class RbczController {
 
     @FXML public void oneOnClick(){
         roadConstraction.setRbcz(Lists.getRbczList().get(0));
+        handler();
         close();
     }
     @FXML public void twoOnClick(){
         roadConstraction.setRbcz(Lists.getRbczList().get(1));
+        handler();
         close();
     }
     @FXML public void treeOnClick(){
         roadConstraction.setRbcz(Lists.getRbczList().get(2));
+        handler();
         close();
     }
     @FXML public void fourWestOnClick(){
         roadConstraction.setRbcz(Lists.getRbczList().get(3));
+        handler();
         close();
     }
 
     @FXML public void fourSouthOnClick(){
         roadConstraction.setRbcz(Lists.getRbczList().get(4));
+        handler();
         close();
     }
 
@@ -41,8 +46,11 @@ public class RbczController {
     }
 
     private void close(){
+        cancelOnClick();
+    }
+
+    private void handler(){
         Stage dlg = (Stage)(rbczPane.getScene().getWindow());
         dlg.getOnCloseRequest().handle(new WindowEvent(dlg, WindowEvent.WINDOW_CLOSE_REQUEST));
-        cancelOnClick();
     }
 }
