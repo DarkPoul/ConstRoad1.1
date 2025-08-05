@@ -110,7 +110,6 @@ public class MainController {
         System.exit(0);
     }
 
-
     @FXML public static void actionChooser(AnchorPane pane){
         Stage actionChoose = new Stage();
         actionChoose.setTitle("Дії з конструкцією дорожнього одягу");
