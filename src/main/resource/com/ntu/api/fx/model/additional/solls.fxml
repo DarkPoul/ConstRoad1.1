@@ -83,7 +83,7 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cancelOnClick" text="Cancel" textAlignment="CENTER" GridPane.rowIndex="5">
+                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cancelOnClick" text="Cкасувати" textAlignment="CENTER" GridPane.rowIndex="5">
                            <font>
                               <Font size="15.0" />
                            </font>

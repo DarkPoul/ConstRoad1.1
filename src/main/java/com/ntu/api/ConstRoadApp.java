@@ -18,6 +18,5 @@ public class ConstRoadApp extends Application {
         Main.start();
         primaryStage.setScene(new Scene(main));
         primaryStage.show();
-
     }
 }

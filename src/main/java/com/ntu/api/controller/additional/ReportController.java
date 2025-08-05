@@ -111,7 +111,7 @@ public class ReportController {
             subGradeMovementReliabilityBtn.setStyle("-fx-background-color: green");
         }
         else{
-            subGradeMovementReliabilityBtn.setStyle("-fx-background-color: red");
+            subGradeMovementReliabilityBtn.setStyle("-fx-background-color: #ff0000");
         }
 
     }

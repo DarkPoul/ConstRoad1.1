@@ -129,7 +129,7 @@ public class MainController {
 
     @FXML public void settingOnClick(){
         Stage settingChoose = new Stage();
-        settingChoose.setTitle("Вибір корневого каталогу");
+        settingChoose.setTitle("Вибір кореневого каталогу");
         settingChoose.setResizable(false);
 
         AnchorPane settingPane = null;
