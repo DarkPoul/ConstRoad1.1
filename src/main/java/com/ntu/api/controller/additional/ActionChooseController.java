@@ -90,25 +90,23 @@ public class ActionChooseController {
     }
 
     @FXML private void optByCostOnClick(){
-
+        // в розробці
     }
 
     @FXML private void optByBitumDepthOnClick(){
-
+        // в розробці
     }
 
     @FXML private void optByFundamentDepthOnClick(){
-
+        // в розробці
     }
 
     @FXML private void optByTotalDepthOnClick(){
-
+        // в розробці
     }
 
     @FXML private void cancelOnClick(){
         Stage dlg = (Stage)(actionChoosePane.getScene().getWindow());
         dlg.close();
     }
-
-
 }
