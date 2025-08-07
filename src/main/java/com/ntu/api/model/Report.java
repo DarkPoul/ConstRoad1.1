@@ -6,7 +6,6 @@ import com.ntu.api.domain.listCreate.Objects.Layers.Layer;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Report {
@@ -246,7 +245,7 @@ public class Report {
             }
         }
         else{
-            inviscLayerMovemmentResult.add("В конструкції дорожнього одягу відсутні шари з нев'язких матеріалів. Тому розрахунок показникаміцності за критерієм зсуву в нев'язких матеріалах не проводитися. ");
+            inviscLayerMovemmentResult.add("В конструкції дорожнього одягу відсутні шари з нев'язких матеріалів. Тому розрахунок показника міцності за критерієм зсуву в нев'язких матеріалах не проводитися. ");
             inviscLayerMovemmentConclusion.add(" ");
             inviscLayerMovemmentMargin.add(" ");
             inviscLayerMovemmentReliability.add(" ");
@@ -257,8 +256,8 @@ public class Report {
     private void write(File directory, RoadConstraction roadConstraction, boolean bool){
         try {
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
-            File fileForReport = new File(directory, "report" + timestamp + ".dat");
-            File fileExcReport = new File(directory, "excellentReport" + timestamp + ".dat");
+            File fileForReport = new File(directory, "report" + timestamp + ".txt");
+            File fileExcReport = new File(directory, "excellentReport" + timestamp + ".txt");
             if(bool){
                 if (excellentBool) {
                     excellentResultWriter = new FileWriter(fileExcReport, true);
@@ -279,12 +278,10 @@ public class Report {
                     }
 
                     File fileForWrite = new File(dir, fileName.toString() + ".txt");
-                    System.out.println(true + "2");
                     try (FileOutputStream fos = new FileOutputStream(fileForWrite);
                          ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                         oos.writeObject(RoadConstractionModel.getRoadConstraction());
                         oos.flush();
-                        System.out.println(true);
                     } catch (FileNotFoundException e) {
                         System.out.println(e);
                         e.printStackTrace();
@@ -329,7 +326,6 @@ public class Report {
             fileWriter.write(roadCost);
             fileWriter.write("\n\n");
             fileWriter.flush();
-            System.out.println("in write " + fileWriter);
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();

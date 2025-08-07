@@ -16,6 +16,11 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ActionChooseController {
     @FXML AnchorPane actionChoosePane;
@@ -78,22 +83,46 @@ public class ActionChooseController {
                 try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
                      ObjectInputStream ois = new ObjectInputStream(is)) {
                     RoadConstractionModel.setEnumerated(true);
-                    ArrayList<ArrayList<Double>> variations = RoadConstractionModel.layerThinckVariation();
-                    int total = variations.size();
-                    int processed = 0;
+                    Iterable<ArrayList<Double>> variations = RoadConstractionModel.layerThinckVariation();
+                    long total = RoadConstractionModel.layerThinckVariationCount();
+                    AtomicInteger processed = new AtomicInteger();
                     System.out.println("Початок перебору варіантів: загалом " + total + " конструкцій");
                     RoadConstraction original = (RoadConstraction) ois.readObject();
-                    for (ArrayList<Double> thinckness : variations) {
-                        processed++;
-                        System.out.println("Перебір варіантів: обробка конструкції " + processed + " з " + total);
-                        updateMessage("Обробка " + processed + " з " + total);
-                        RoadConstraction roadConstraction = copyRoadConstraction(original);
-                        RoadConstractionModel.setRoadConstraction(roadConstraction);
-                        for (int i = 0; i < RoadConstractionModel.getTotalLayerList().size(); i++) {
-                            RoadConstractionModel.getTotalLayerList().get(i).setThickness(thinckness.get(i) / 100);
-                        }
-                        initialize();
-                        RoadConstractionModel.analisys(actionChoosePane);
+
+                    int cores = Math.max(1, Runtime.getRuntime().availableProcessors());
+                    int batchSize = (int) Math.ceil((double) total / cores);
+                    List<List<ArrayList<Double>>> portions = new ArrayList<>();
+                    for (int i = 0; i < total; i += batchSize) {
+                        portions.add(variations.subList(i, Math.min(i + batchSize, total)));
+                    }
+
+                    ExecutorService executor = Executors.newFixedThreadPool(portions.size());
+                    for (List<ArrayList<Double>> portion : portions) {
+                        executor.submit(() -> {
+                            for (ArrayList<Double> thinckness : portion) {
+                                int count = processed.incrementAndGet();
+                                System.out.println("Перебір варіантів: обробка конструкції " + count + " з " + total);
+                                updateMessage("Обробка " + count + " з " + total);
+                                try {
+                                    RoadConstraction roadConstraction = copyRoadConstraction(original);
+                                    RoadConstractionModel.setRoadConstraction(roadConstraction);
+                                    for (int i = 0; i < RoadConstractionModel.getTotalLayerList().size(); i++) {
+                                        RoadConstractionModel.getTotalLayerList().get(i).setThickness(thinckness.get(i) / 100);
+                                    }
+                                    initialize();
+                                    RoadConstractionModel.analisys(actionChoosePane);
+                                } catch (IOException | ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                    executor.shutdown();
+                    try {
+                        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                     System.out.println("Перебір варіантів завершено");
                 } catch (IOException | ClassNotFoundException e) {
