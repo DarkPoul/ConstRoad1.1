@@ -246,7 +246,7 @@ public class Report {
             }
         }
         else{
-            inviscLayerMovemmentResult.add("В конструкції дорожнього одягу відсутні шари з нев'язких матеріалів. Тому розрахунок показника міцності за критерієм зсуву в нев'язких матеріалах не проводитися. ");
+            inviscLayerMovemmentResult.add("В конструкції дорожнього одягу відсутні шари з нев'язких матеріалів. Тому розрахунок показникаміцності за критерієм зсуву в нев'язких матеріалах не проводитися. ");
             inviscLayerMovemmentConclusion.add(" ");
             inviscLayerMovemmentMargin.add(" ");
             inviscLayerMovemmentReliability.add(" ");
@@ -259,15 +259,7 @@ public class Report {
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
             File fileForReport = new File(directory, "report" + timestamp + ".dat");
             File fileExcReport = new File(directory, "excellentReport" + timestamp + ".dat");
-            System.out.println("in write " + directory);
-//            System.out.println("in write " + fileForReport);
-//            System.out.println("in write " + fileExcReport);
-//            File fileForReport = new File(directory, "report"+ Calendar.getInstance().getTime() +".txt");
-//            File fileExcReport = new File(directory, "excellentReport"+ Calendar.getInstance().getTime() + ".txt");
-            System.out.println(true+"3");
-            bool=true;
             if(bool){
-                excellentBool = true;
                 if (excellentBool) {
                     excellentResultWriter = new FileWriter(fileExcReport, true);
                     print(excellentResultWriter, roadConstraction);
@@ -275,8 +267,6 @@ public class Report {
                     if(!directoryForRoadConstr.exists()) {
                         directoryForRoadConstr.mkdirs();
                     }
-//                    String dirName = Calendar.getInstance().getTime().toString();
-//                    File dir = new File(directoryForRoadConstr,dirName);
                     File dir = new File(directoryForRoadConstr, timestamp);
                     dir.mkdirs();
 

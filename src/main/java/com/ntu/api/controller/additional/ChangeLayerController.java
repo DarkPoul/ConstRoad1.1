@@ -87,18 +87,18 @@ public class ChangeLayerController {
 
     @FXML private void layerConstractionOnClick(){
         try{
-        boxClear(layerDepthBox);
-        layerConstractionBox.setPromptText(Lists.getRoadLayers().get(layerBox.getSelectionModel().getSelectedIndex()).getLayers().get(layerConstractionBox.getSelectionModel().getSelectedIndex()).toString());
-        layerDepthBox.getItems().setAll(depthCheck());
-        layerPositionBox.getItems().setAll(roadConstraction.positionCheck(layerType.getText()));
-        tempLayer = layerCheck();}
+            boxClear(layerDepthBox);
+            layerConstractionBox.setPromptText(Lists.getRoadLayers().get(layerBox.getSelectionModel().getSelectedIndex()).getLayers().get(layerConstractionBox.getSelectionModel().getSelectedIndex()).toString());
+            layerDepthBox.getItems().setAll(depthCheck());
+            layerPositionBox.getItems().setAll(roadConstraction.positionCheck(layerType.getText()));
+            tempLayer = layerCheck();}
         catch (RuntimeException e){}
     }
 
     @FXML private void layerDepthOnClick(){
         try{
-        layerDepthBox.setPromptText(layerTableList.get(layerBox.getSelectionModel().getSelectedIndex()).getThickness().toString());
-        tempLayer.setThickness(Double.parseDouble(layerDepthBox.getSelectionModel().getSelectedItem())*0.01);
+            layerDepthBox.setPromptText(layerTableList.get(layerBox.getSelectionModel().getSelectedIndex()).getThickness().toString());
+            tempLayer.setThickness(Double.parseDouble(layerDepthBox.getSelectionModel().getSelectedItem())*0.01);
         }
         catch (RuntimeException e){}
     }
@@ -110,10 +110,10 @@ public class ChangeLayerController {
 
     @FXML private void moveUpOnClick(){
         layerPosition = Integer.parseInt(layerPositionBox.getPromptText());
-            if(layerPosition>Integer.parseInt(roadConstraction.positionCheck(layerType.getText()).get(0))){
-                layerPosition--;
-                saveOnClick(true);
-            }
+        if(layerPosition>Integer.parseInt(roadConstraction.positionCheck(layerType.getText()).get(0))){
+            layerPosition--;
+            saveOnClick(true);
+        }
     }
 
     @FXML private void moveDownOnClick(){
@@ -131,7 +131,6 @@ public class ChangeLayerController {
         else {
             saveOnClick(true);
         }
-
     }
 
     private void saveOnClick(boolean bool){
@@ -216,7 +215,6 @@ public class ChangeLayerController {
             e.printStackTrace();
         }
     }
-
 
     @FXML private void cancelOnClick(){
         Stage dlg = (Stage)(changeLayerPane.getScene().getWindow());

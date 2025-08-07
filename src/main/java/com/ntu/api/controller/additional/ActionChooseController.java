@@ -4,9 +4,11 @@ import com.ntu.api.controller.main.InputController;
 import com.ntu.api.domain.Message;
 import com.ntu.api.domain.RoadConstraction;
 import com.ntu.api.model.RoadConstractionModel;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -66,27 +68,57 @@ public class ActionChooseController {
     }
 
     @FXML private void enumerationOnClick(){
-        try {
-            RoadConstractionModel.setEnumerated(true);
-//            RoadConstractionModel.setDirectory(RoadConstractionModel.getDirectory().getParentFile());
-            for (ArrayList<Double> thinckness : RoadConstractionModel.layerThinckVariation()) {
-                try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
-                     ObjectInputStream ois = new ObjectInputStream(is)) {
-                    RoadConstraction roadConstraction = (RoadConstraction) ois.readObject();
-                    for (int i = 0; i < RoadConstractionModel.getTotalLayerList().size(); i++) {
-                        RoadConstractionModel.getTotalLayerList().get(i).setThickness(thinckness.get(i)/100);
+        Alert progressAlert = new Alert(Alert.AlertType.INFORMATION);
+        progressAlert.setTitle("Перебір варіантів");
+        progressAlert.setHeaderText(null);
+        progressAlert.setContentText("Йде перебір варіантів, будь ласка, зачекайте...");
+        progressAlert.initOwner(actionChoosePane.getScene().getWindow());
+        progressAlert.show();
+
+        Task<Void> enumerationTask = new Task<Void>() {
+            @Override
+            protected Void call() {
+                try {
+                    RoadConstractionModel.setEnumerated(true);
+                    ArrayList<ArrayList<Double>> variations = RoadConstractionModel.layerThinckVariation();
+                    int total = variations.size();
+                    int processed = 0;
+                    System.out.println("Початок перебору варіантів: загалом " + total + " конструкцій");
+                    for (ArrayList<Double> thinckness : variations) {
+                        processed++;
+                        System.out.println("Перебір варіантів: обробка конструкції " + processed + " з " + total);
+                        updateMessage("Обробка " + processed + " з " + total);
+                        try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
+                             ObjectInputStream ois = new ObjectInputStream(is)) {
+                            RoadConstraction roadConstraction = (RoadConstraction) ois.readObject();
+                            for (int i = 0; i < RoadConstractionModel.getTotalLayerList().size(); i++) {
+                                RoadConstractionModel.getTotalLayerList().get(i).setThickness(thinckness.get(i)/100);
+                            }
+                            initialize();
+                            RoadConstractionModel.setRoadConstraction(roadConstraction);
+                            RoadConstractionModel.analisys(actionChoosePane);
+                        }
                     }
-                    initialize();
-                    RoadConstractionModel.setRoadConstraction(roadConstraction);
-                    RoadConstractionModel.analisys(actionChoosePane);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                    System.out.println("Перебір варіантів завершено");
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
+                return null;
             }
-        }catch (IOException e) {e.printStackTrace();}
-        Message.errorCatch(actionChoosePane,"Результати", "Перебір варіантів конструкції дорожнього покриття успішно завершена. Результати представлені у відповідному файлі звіту (.../report/...)");
+        };
+
+        progressAlert.contentTextProperty().bind(enumerationTask.messageProperty());
+
+        enumerationTask.setOnSucceeded(event -> {
+            progressAlert.close();
+            Message.errorCatch(actionChoosePane,"Результати", "Перебір варіантів конструкції дорожнього покриття успішно завершена.\nРезультати представлені у відповідному файлі звіту (.../report/...)");
+        });
+
+        enumerationTask.setOnFailed(event -> progressAlert.close());
+
+        Thread th = new Thread(enumerationTask);
+        th.setDaemon(true);
+        th.start();
     }
 
     @FXML private void optByCostOnClick(){
