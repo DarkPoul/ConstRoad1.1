@@ -31,17 +31,18 @@ public class MainController {
     }
 
     @FXML public void initialize(){
-        FileReader fileReader = null;
-        try {
-            String root;
-            fileReader = new FileReader("src/main/root");
-            Scanner scanner = new Scanner(fileReader);
-            root = scanner.nextLine();
+        try (FileReader fileReader = new FileReader("src/main/root");
+             Scanner scanner = new Scanner(fileReader)) {
+            String root = scanner.nextLine();
             Lists.setRoot(root);
             Main.start();
 //            Lists.listReader();
         } catch (FileNotFoundException e) {
-           Message.errorCatch(main,"Помилка корневої папки","Перевірте правильність введення адреси кореневої папки в файлі root");
+            javafx.application.Platform.runLater(() ->
+                    Message.errorCatch(main, "Помилка корневої папки",
+                            "Перевірте правильність введення адреси кореневої папки в файлі root"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     @FXML public void helpOnClick(){

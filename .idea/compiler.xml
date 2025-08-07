@@ -9,8 +9,5 @@
         <module name="ConstRoad" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ConstRoad" target="7" />
-    </bytecodeTargetLevel>
   </component>
 </project>
