@@ -83,8 +83,10 @@ public class ActionChooseController {
                 try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
                      ObjectInputStream ois = new ObjectInputStream(is)) {
                     RoadConstractionModel.setEnumerated(true);
-                    Iterable<ArrayList<Double>> variations = RoadConstractionModel.layerThinckVariation();
-                    long total = RoadConstractionModel.layerThinckVariationCount();
+                    Iterable<ArrayList<Double>> variationsIter = RoadConstractionModel.layerThinckVariation();
+                    List<ArrayList<Double>> variations = new ArrayList<>();
+                    variationsIter.forEach(variations::add);
+                    int total = variations.size();
                     AtomicInteger processed = new AtomicInteger();
                     System.out.println("Початок перебору варіантів: загалом " + total + " конструкцій");
                     RoadConstraction original = (RoadConstraction) ois.readObject();
