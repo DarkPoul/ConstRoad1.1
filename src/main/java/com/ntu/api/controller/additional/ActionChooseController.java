@@ -14,10 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class ActionChooseController {
@@ -78,26 +75,25 @@ public class ActionChooseController {
         Task<Void> enumerationTask = new Task<Void>() {
             @Override
             protected Void call() {
-                try {
+                try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
+                     ObjectInputStream ois = new ObjectInputStream(is)) {
                     RoadConstractionModel.setEnumerated(true);
                     ArrayList<ArrayList<Double>> variations = RoadConstractionModel.layerThinckVariation();
                     int total = variations.size();
                     int processed = 0;
                     System.out.println("Початок перебору варіантів: загалом " + total + " конструкцій");
+                    RoadConstraction original = (RoadConstraction) ois.readObject();
                     for (ArrayList<Double> thinckness : variations) {
                         processed++;
                         System.out.println("Перебір варіантів: обробка конструкції " + processed + " з " + total);
                         updateMessage("Обробка " + processed + " з " + total);
-                        try (FileInputStream is = new FileInputStream(RoadConstractionModel.getFile());
-                             ObjectInputStream ois = new ObjectInputStream(is)) {
-                            RoadConstraction roadConstraction = (RoadConstraction) ois.readObject();
-                            for (int i = 0; i < RoadConstractionModel.getTotalLayerList().size(); i++) {
-                                RoadConstractionModel.getTotalLayerList().get(i).setThickness(thinckness.get(i)/100);
-                            }
-                            initialize();
-                            RoadConstractionModel.setRoadConstraction(roadConstraction);
-                            RoadConstractionModel.analisys(actionChoosePane);
+                        RoadConstraction roadConstraction = copyRoadConstraction(original);
+                        RoadConstractionModel.setRoadConstraction(roadConstraction);
+                        for (int i = 0; i < RoadConstractionModel.getTotalLayerList().size(); i++) {
+                            RoadConstractionModel.getTotalLayerList().get(i).setThickness(thinckness.get(i) / 100);
                         }
+                        initialize();
+                        RoadConstractionModel.analisys(actionChoosePane);
                     }
                     System.out.println("Перебір варіантів завершено");
                 } catch (IOException | ClassNotFoundException e) {
@@ -140,5 +136,17 @@ public class ActionChooseController {
     @FXML private void cancelOnClick(){
         Stage dlg = (Stage)(actionChoosePane.getScene().getWindow());
         dlg.close();
+    }
+
+    private RoadConstraction copyRoadConstraction(RoadConstraction original) throws IOException, ClassNotFoundException {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream out = new ObjectOutputStream(bos)) {
+            out.writeObject(original);
+            out.flush();
+            try (ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+                 ObjectInputStream in = new ObjectInputStream(bis)) {
+                return (RoadConstraction) in.readObject();
+            }
+        }
     }
 }
