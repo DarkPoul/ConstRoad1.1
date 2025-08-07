@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class MainController {
@@ -38,11 +39,11 @@ public class MainController {
             Main.start();
 //            Lists.listReader();
         } catch (FileNotFoundException e) {
-            javafx.application.Platform.runLater(() ->
-                    Message.errorCatch(main, "Помилка корневої папки",
-                            "Перевірте правильність введення адреси кореневої папки в файлі root"));
+            String root = "base/";
+            Lists.setRoot(root);
+            Main.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
     @FXML public void helpOnClick(){
